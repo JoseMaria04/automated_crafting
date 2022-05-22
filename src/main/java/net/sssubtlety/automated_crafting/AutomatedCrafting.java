@@ -29,31 +29,4 @@ public class AutomatedCrafting {
 		return Registrar.BLOCK;
 	}
 
-	public static class Init implements ModInitializer {
-		@Override
-		public void onInitialize () {
-			Config.init();
-			Registrar.init();
-			AutoCrafterGuiDescription.init();
-
-			END_DATA_PACK_RELOAD.register((u1, u2, u3) -> AutoCrafterBlockEntity.validator.update());
-		}
-	}
-
-	public static class ClientInit implements ClientModInitializer {
-		public static final String POWERED = "powered";
-
-		@Override
-		@Environment(EnvType.CLIENT)
-		public void onInitializeClient() {
-			BlockRenderLayerMap.INSTANCE.putBlock(AutomatedCrafting.getBLOCK(), RenderLayer.getSolid());
-			// don't be fooled, specifying the generics' types is necessary here
-			ScreenRegistry.<AutoCrafterGuiDescription, AutoCrafterScreen>register(Registrar.SCREEN_HANDLER_TYPE, (gui, playerInventory, titleText) -> new AutoCrafterScreen(gui, playerInventory.player, titleText));
-			CrowdinTranslate.downloadTranslations("automated-crafting", NAMESPACE);
-
-			ModContainer modContainer = FabricLoader.getInstance().getModContainer(NAMESPACE).get();
-			registerBuiltinResourcePack(new Identifier(NAMESPACE, POWERED + "_icon"), modContainer, ResourcePackActivationType.NORMAL);
-			registerBuiltinResourcePack(new Identifier(NAMESPACE, POWERED + "_block"), modContainer, ResourcePackActivationType.NORMAL);
-		}
-	}
 }

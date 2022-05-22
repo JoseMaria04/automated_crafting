@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @Environment(EnvType.CLIENT)
-public class AutomatedCraftingModMenuIntegration implements ModMenuApi {
+public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return parent -> {

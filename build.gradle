@@ -1,49 +1,26 @@
 //file:noinspection GroovyAssignabilityCheck
-plugins {
-	id 'fabric-loom' version '0.10-SNAPSHOT'
-	id 'maven-publish'
-	// Quilt mappings
-	id 'org.quiltmc.quilt-mappings-on-loom' version '3.1.2'
-	// Quiltflower for decompiling Minecraft
-	id 'io.github.juuxel.loom-quiltflower-mini' version '1.2.1'
-	id "org.jetbrains.kotlin.jvm"
-}
-
-repositories {
-	maven {
-		url = "https://oskarstrom.net/maven"
-		content { includeGroup "net.oskarstrom" }
+buildscript {
+	dependencies {
+		classpath "de.guntram.mcmod:crowdin-translate:$crowdin_translate_version"
 	}
-
-	maven {
-		url = 'https://maven.cafeteria.dev'
-		content {includeGroup 'dev.cafeteria'}
-	}
-
-	maven {
-		url = uri("https://storage.googleapis.com/devan-maven/")
-	}
-
-	maven {
-		url = "https://maven.jamieswhiteshirt.com/libs-release/"
-		content {includeGroup "com.jamieswhiteshirt"}
-	}
-
-	maven {
-		name = 'Ladysnake Mods'
-		url = 'https://ladysnake.jfrog.io/artifactory/mods'
-		content {
-			includeGroup 'io.github.ladysnake'
-			includeGroupByRegex 'io\\.github\\.onyxstudios.*'
+	repositories {
+		maven {
+			name = 'CrowdinTranslate source'
+			url = "https://minecraft.guntram.de/maven/"
 		}
 	}
-
-	maven {
-		url = 'https://maven.blamejared.com'
-	}
 }
 
-apply from: "https://gitlab.com/supersaiyansubtlety/mod_gradle_scripts/-/raw/master/applyAll.gradle"
+plugins {
+	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'maven-publish'
+	// Quilt mappings
+	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.0'
+	// Quiltflower for decompiling Minecraft
+	id 'io.github.juuxel.loom-quiltflower' version '1.7.2'
+}
+
+apply from: "https://gitlab.com/supersaiyansubtlety/mod_gradle_scripts/-/raw/$project.mod_gradle_scripts_ref/applyAll.gradle"
 
 dependencies {
 	/**
@@ -53,15 +30,15 @@ dependencies {
 	 JitPack: com.github.<User>:<Repo>:<Tag/commit_hash> , see https://jitpack.io/
 	 **/
 	// Fabric API
-	modImplementation "net.fabricmc.fabric-api:fabric-api:$project.fabric_api_version"
+	dependedMod "net.fabricmc.fabric-api:fabric-api:", "fabric", null, null
 
 	// GUI library
 	bundledMod "io.github.cottonmc:LibGui:$project.libgui_version"
 
 	//Config library
-	requiredApi "me.shedaniel.cloth:cloth-config-fabric:$project.cloth_config_version"
+	dependedMod "me.shedaniel.cloth:cloth-config-fabric:", "cloth_config"
 	// Config menu support
-	optionalMod true, "com.terraformersmc:modmenu:$project.modmenu_version"
+	suggestedMod true, "com.terraformersmc:modmenu:", "modmenu"
 	// translation fetching
 	bundledMod "de.guntram.mcmod:crowdin-translate:$project.crowdin_translate_version"
 

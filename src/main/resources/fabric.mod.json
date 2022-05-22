@@ -19,13 +19,13 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "${maven_group}.${mod_id}.${ModId}\$Init"
+      "${maven_group}.${mod_id}.Init"
     ],
     "client": [
-      "${maven_group}.${mod_id}.${ModId}\$ClientInit"
+      "${maven_group}.${mod_id}.ClientInit"
     ],
     "modmenu": [
-      "${maven_group}.${mod_id}.gui.${ModId}ModMenuIntegration"
+      "${maven_group}.${mod_id}.gui.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -33,8 +33,8 @@
   ],
 
   "depends": {
-    "fabricloader": ">=${min_loader_version}",
-    "fabric": ">=${min_fabric_api_version}",
+    "fabricloader": ">=${min_fabricloader_version}",
+    "fabric": ">=${min_fabric_version}",
     "minecraft": ">=${min_minecraft_version} <=${minecraft_version}",
     "cloth-config2": ">=${min_cloth_config_version}"
   },
