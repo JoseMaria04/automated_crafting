@@ -1,9 +1,12 @@
 package net.sssubtlety.automated_crafting;
 
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -17,6 +20,7 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPointerImpl;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 
 import java.util.Random;
@@ -30,7 +34,7 @@ public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntity
         AutomatedCrafting.LOGGER.error("AutoCrafterBlock found block entity that was not an AutoCrafterBlockEntity.");
     }
 
-    public AutoCrafterBlock(Settings settings) throws IllegalAccessException, InstantiationException {
+    public AutoCrafterBlock(Settings settings) {
         super(settings);
         this.setDefaultState((((this.stateManager.getDefaultState()).with(POWERED, false).with(ACTIVATED, false))));
     }

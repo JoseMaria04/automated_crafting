@@ -1,8 +1,13 @@
 package net.sssubtlety.automated_crafting;
 
 import com.google.common.collect.Streams;
+import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
+import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
+import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
 import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -23,6 +28,7 @@ import net.minecraft.util.math.Direction;
 import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
 import net.sssubtlety.automated_crafting.inventory.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -33,6 +39,7 @@ import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
   Not actually a sided inventory, but needs `getAvailableSlots`, `canInsert`, `canExtract`.
   These allow for separate internal inventories and configs.
 */
+@SuppressWarnings("UnstableApiUsage")
 public class AutoCrafterBlockEntity extends LootableContainerBlockEntity implements SidedInventory, TrimmableInventory, NamedScreenHandlerFactory {
     public static final int MAX_STACK_SIZE = 1;
     public static final int[] AVAILABLE_INDICES;
@@ -41,6 +48,11 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
         return templateStack.isOf(inputStack.getItem()) && ItemStack.areNbtEqual(templateStack, inputStack);
+    }
+
+    public static Storage<ItemVariant> getStorage(AutoCrafterBlockEntity blockEntity, Direction direction) {
+        if (direction == Direction.DOWN) return blockEntity.inputAndOutputStorage;
+        else return blockEntity.inputInventory.storage;
     }
 
     static {
@@ -55,10 +67,15 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
         }
     }
 
-    protected final DefaultedStackView combinedStacks;
+
+//    protected final DefaultedStackView combinedStacks;
     protected final TemplateInventory templateInventory;
     protected final InputInventory inputInventory;
-    protected final DefaultedStackView.Singleton output;
+    protected final SingleOutputInventory output;
+
+    protected final CombinedStorage<ItemVariant, Storage<ItemVariant>> inputAndOutputStorage;
+//    protected final CombinedStorage<ItemVariant, Storage<ItemVariant>> combinedStorage;
+
 
     protected final Validator.Validation validation;
     protected Recipe<CraftingInventory> recipeCache;
@@ -66,10 +83,17 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(Registrar.BLOCK_ENTITY_TYPE, pos, state);
 
-        this.combinedStacks = new DefaultedStackView(Slots.INVENTORY_SIZE);
-        this.templateInventory = new TemplateInventory(this.combinedStacks.subList(Slots.TEMPLATE_START, Slots.INPUT_START));
-        this.inputInventory = new InputInventory(this.combinedStacks.subList(Slots.INPUT_START, Slots.OUTPUT_SLOT), this.templateInventory);
-        this.output = this.combinedStacks.subStack(Slots.OUTPUT_SLOT);
+//        this.combinedStacks = new DefaultedStackView(Slots.INVENTORY_SIZE);
+        this.templateInventory = new TemplateInventory(new DefaultedStackView(CraftingView.Grid.SIZE));//this.combinedStacks.subList(Slots.TEMPLATE_START, Slots.INPUT_START));
+        this.inputInventory = new InputInventory(new DefaultedStackView(CraftingView.Grid.SIZE), templateInventory, this::tryCraftContinuously);//this.combinedStacks.subList(Slots.INPUT_START, Slots.OUTPUT_SLOT), this.templateInventory);
+        this.output = new SingleOutputInventory(this::tryCraftContinuously);
+
+        this.inputAndOutputStorage = new CombinedStorage<>(List.of(output.storage, inputInventory.storage));
+//        combinedStorage = new CombinedStorage<>(List.of(
+//            InventoryStorage.of(templateInventory, null),
+//            InventoryStorage.of(inputInventory, null),
+//            InventoryStorage.of(output, null)
+//        ));
 
         this.recipeCache = null;
         this.validation = validator.getValidation();
@@ -132,13 +156,13 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     public void tryCraft() {
-        try {
-            if (Transaction.getCurrentUnsafe() != null) return;
-            // if null, vanilla transfer and you can just update the stacks directly
-            // if not null, transfer api transfer. Do nothing
-        } catch (IllegalStateException ex) {
-            // means that this is the final markDirty, OK to update contents
-        }
+//        try {
+//            if (Transaction.getCurrentUnsafe() != null) return;
+//            // if null, vanilla transfer and you can just update the stacks directly
+//            // if not null, transfer api transfer. Do nothing
+//        } catch (IllegalStateException ex) {
+//            // means that this is the final markDirty, OK to update contents
+//        }
 
         Optional<Recipe<CraftingInventory>> optRecipe = getRecipe();
         if(optRecipe.isPresent()) {
@@ -174,7 +198,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     }
 
     protected OutputAction checkOutput(ItemStack output) {
-        if (this.output.isStackEmpty()) return OutputAction.SET;
+        if (this.output.isEmpty()) return OutputAction.SET;
         else if (output.isItemEqual(this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
             //outputs are same item and output can fit in stack
             return OutputAction.INCREMENT;
@@ -250,7 +274,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
                 templateInventory.removeStack(slot, amount);
         }
 
-        tryCraftContinuously();
+//        tryCraftContinuously();
         return removedStack;
     }
 
@@ -293,7 +317,11 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     @Override
     protected DefaultedList<ItemStack> getInvStackList() {
-        return combinedStacks;
+        final DefaultedList<ItemStack> stacks = DefaultedList.of();
+        stacks.addAll(templateInventory.getStacks());
+        stacks.addAll(inputInventory.getStacks());
+        stacks.add(output.get());
+        return stacks;
     }
 
     @Override
@@ -357,8 +385,8 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public Stream<ItemStack> getTrimmedStream() {
         // don't include template because it's a 'ghost' inventory
         Stream<ItemStack> trimmedInput = inputInventory.getTrimmedStream();
-        if (output.isStackEmpty()) return trimmedInput;
-        else return Streams.concat(trimmedInput, output.stream());
+        if (output.isEmpty()) return trimmedInput;
+        else return Streams.concat(trimmedInput, Stream.of(output.get()));
     }
 
     public enum OutputAction {

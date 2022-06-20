@@ -3,6 +3,7 @@ package net.sssubtlety.automated_crafting;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
+import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.Material;
@@ -19,30 +20,26 @@ import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
 
 import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
 
-public interface Registrar {
+@SuppressWarnings("UnstableApiUsage")
+public class Registrar {
     static void init() { }
 
-    Block BLOCK = Registry.register(Registry.BLOCK, AutoCrafterBlock.ID, createAutoCrafterBlock());
+    public static Block BLOCK = Registry.register(Registry.BLOCK, AutoCrafterBlock.ID, new AutoCrafterBlock(FabricBlockSettings.of(new Material(MapColor.GRAY, false, true, true, true, false, false, PistonBehavior.BLOCK)).strength(1, 3)));
 
-    BlockItem ITEM = Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "auto_crafter"),
+    public static BlockItem ITEM = Registry.register(Registry.ITEM, new Identifier(NAMESPACE, "auto_crafter"),
             new BlockItem(Registrar.BLOCK, new Item.Settings().group(ItemGroup.REDSTONE)));
 
-    BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE =
+    public static BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE =
             Registry.register(
                     Registry.BLOCK_ENTITY_TYPE,
                 NAMESPACE + ":auto_crafter_entity",
                     FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK).build(null)
             );
 
-    ScreenHandlerType<AutoCrafterGuiDescription> SCREEN_HANDLER_TYPE =
+    public static ScreenHandlerType<AutoCrafterGuiDescription> SCREEN_HANDLER_TYPE =
             ScreenHandlerRegistry.registerSimple(AutoCrafterBlock.ID, (world, playerInventory) -> AutoCrafterGuiDescription.create(world, playerInventory, ScreenHandlerContext.EMPTY));
 
-
-    private static Block createAutoCrafterBlock() throws RuntimeException {
-        try {
-            return new AutoCrafterBlock(FabricBlockSettings.of(new Material(MapColor.GRAY, false, true, true, true, false, false, PistonBehavior.BLOCK)).strength(1, 3));
-        } catch (IllegalAccessException | InstantiationException e) {
-            throw new RuntimeException("Unable to construct auto crafter block!", e);
-        }
+    static {
+        ItemStorage.SIDED.registerForBlockEntity(AutoCrafterBlockEntity::getStorage, BLOCK_ENTITY_TYPE);
     }
 }

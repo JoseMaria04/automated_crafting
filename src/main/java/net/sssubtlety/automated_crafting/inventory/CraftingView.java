@@ -10,7 +10,6 @@ import net.minecraft.util.collection.DefaultedList;
 import net.sssubtlety.automated_crafting.mixin.CraftingInventoryAccessor;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -23,7 +22,7 @@ public abstract class CraftingView extends CraftingInventory implements Trimmabl
 
     public CraftingView(DefaultedList<ItemStack> stacks) {
         super(dummyHandler, Grid.WIDTH, Grid.HEIGHT);
-        ((CraftingInventoryAccessor)this).setStacks(stacks);
+        ((CraftingInventoryAccessor)this).automated_crafting$setStacks(stacks);
         occupiedSlots = new LinkedHashSet<>(Grid.SIZE, 1);
     }
 
@@ -119,8 +118,12 @@ public abstract class CraftingView extends CraftingInventory implements Trimmabl
         }
     }
 
+    public DefaultedList<ItemStack> getStacks() {
+        return ((CraftingInventoryAccessor) this).automated_crafting$getStacks();
+    }
+
     private static final class DummyHandler extends ScreenHandler {
-        protected DummyHandler() {
+        private DummyHandler() {
             super(null, 0);
         }
 
