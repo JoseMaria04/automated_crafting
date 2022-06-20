@@ -1,3 +1,10 @@
+- 1.4.4-b1 (20 Jun. 2022):
+
+  Updated for 1.18.2!
+
+  Now uses Fabric's transfer API to facilitate the "Craft Continuously While Powered" option. 
+  This should fix some bugs that occurred when the auto crafter's output was full and a hopper below couldn't pull those items out.
+
 - 1.4.3 (10 Feb. 2022): Improved compatibility with modded item transferring.
 - 1.4.3-a1 (27 Jan. 2022): Check Transaction API context in hopes of fixing mod incompatibility show in #30
 - 1.4.2 (21 Dec. 2021):
