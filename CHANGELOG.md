@@ -1,3 +1,6 @@
+- 1.4.5 (27 Jun. 2022):
+  - Updated for 1.19!
+  - Cloth Config is now optional
 - 1.4.4-b1 (20 Jun. 2022):
 
   Updated for 1.18.2!
