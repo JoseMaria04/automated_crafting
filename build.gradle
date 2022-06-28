@@ -43,8 +43,8 @@ dependencies {
 	bundledMod "de.guntram.mcmod:crowdin-translate:$project.crowdin_translate_version"
 
 	// speed up launching in dev
-	devRuntime "com.github.astei:lazydfu:$project.lazy_dfu_version"
-//	devRuntime "net.oskarstrom:DashLoader:$project.dashloader_version"
+	devRuntime "maven.modrinth:lazydfu:$project.lazy_dfu_version"
+//	devRuntime "maven.modrinth:dashloader:$project.dashloader_version"
 
 	// remember window size+pos in dev
 	devRuntime "net.dblsaiko:winwonders:$project.winwonders_version"

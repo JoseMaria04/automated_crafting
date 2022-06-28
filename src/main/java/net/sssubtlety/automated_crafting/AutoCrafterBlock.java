@@ -1,12 +1,9 @@
 package net.sssubtlety.automated_crafting;
 
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -20,10 +17,8 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPointerImpl;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntityProvider {
     public static final Identifier ID = new Identifier("automated_crafting", "auto_crafter");
@@ -93,7 +88,7 @@ public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntity
     }
 
     @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
         if (!Config.doesCraftContinuously() && state.get(ACTIVATED))
             world.setBlockState(pos, state.with(ACTIVATED, false), 2);
 

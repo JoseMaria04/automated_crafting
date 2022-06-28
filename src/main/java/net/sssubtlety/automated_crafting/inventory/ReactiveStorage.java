@@ -37,8 +37,8 @@ public class ReactiveStorage extends SnapshotParticipant<DefaultedList<ItemStack
     }
 
     @Override
-    public Iterator<? extends StorageView<ItemVariant>> iterator(TransactionContext transaction) {
-        return delegate.iterator(transaction);
+    public Iterator<StorageView<ItemVariant>> iterator() {
+        return delegate.iterator();
     }
 
     @Override

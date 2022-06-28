@@ -14,7 +14,7 @@ import net.minecraft.screen.ArrayPropertyDelegate;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.SlotActionType;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.sssubtlety.automated_crafting.AutoCrafterBlockEntity;
 import net.sssubtlety.automated_crafting.Config;
 import net.sssubtlety.automated_crafting.Registrar;
@@ -127,7 +127,7 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
 
     protected static void addLabel(WPlainPanel root, String s, int inputLabelX) {
         root.add(
-                new WLabel(new TranslatableText("label." + NAMESPACE + s))
+                new WLabel(Text.translatable("label." + NAMESPACE + s))
                         .setHorizontalAlignment(HorizontalAlignment.CENTER),
                 inputLabelX,
                 GRID_LABEL_Y

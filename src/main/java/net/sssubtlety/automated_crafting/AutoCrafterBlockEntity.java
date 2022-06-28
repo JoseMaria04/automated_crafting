@@ -1,17 +1,17 @@
 package net.sssubtlety.automated_crafting;
 
 import com.google.common.collect.Streams;
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
-import net.fabricmc.fabric.api.transfer.v1.transaction.Transaction;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.inventory.Inventories;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
@@ -20,8 +20,8 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -44,7 +44,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public static final int MAX_STACK_SIZE = 1;
     public static final int[] AVAILABLE_INDICES;
     public static final Validator validator = new Validator();
-    public static final TranslatableText NAME = new TranslatableText("block.automated_crafting.auto_crafter");
+    public static final MutableText NAME = Text.translatable("block.automated_crafting.auto_crafter");
 
     public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
         return templateStack.isOf(inputStack.getItem()) && ItemStack.areNbtEqual(templateStack, inputStack);
