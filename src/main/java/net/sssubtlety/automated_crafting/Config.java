@@ -9,45 +9,21 @@ import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
 
 @me.shedaniel.autoconfig.annotation.Config(name = NAMESPACE)
 public class Config implements ConfigData {
-    private static Config INSTANCE;
-
-    public static void init() {
-        AutoConfig.register(Config.class, GsonConfigSerializer::new);
-        INSTANCE = AutoConfig.getConfigHolder(Config.class).getConfig();
-    }
+    @ConfigEntry.Gui.Tooltip()
+    boolean simple_mode = FeatureControl.Defaults.simple_mode;
 
     @ConfigEntry.Gui.Tooltip()
-    boolean simpleMode = true;
+    boolean quasi_connective = FeatureControl.Defaults.quasi_connective;
 
     @ConfigEntry.Gui.Tooltip()
-    boolean quasiConnectivity = false;
+    boolean redirect_redstone = FeatureControl.Defaults.redirect_redstone;
 
     @ConfigEntry.Gui.Tooltip()
-    boolean redirectsRedstone = false;
+    boolean craft_continuously = FeatureControl.Defaults.craft_continuously;
 
     @ConfigEntry.Gui.Tooltip()
-    boolean craftContinuously = false;
+    boolean comparator_reads_output = FeatureControl.Defaults.comparator_reads_output;
 
     @ConfigEntry.Gui.Tooltip()
-    boolean comparatorReadsOutput = false;
-
-    public static boolean isSimpleMode() {
-        return INSTANCE.simpleMode;
-    }
-
-    public static boolean isQuasiConnected() {
-        return INSTANCE.quasiConnectivity;
-    }
-
-    public static boolean doesCraftContinuously() {
-        return INSTANCE.craftContinuously;
-    }
-
-    public static boolean doesRedirectRedstone() {
-        return INSTANCE.redirectsRedstone;
-    }
-
-    public static boolean doesComparatorReadOutput() {
-        return INSTANCE.comparatorReadsOutput;
-    }
+    boolean fetch_translation_updates = FeatureControl.Defaults.fetch_translation_updates;
 }

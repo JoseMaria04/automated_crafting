@@ -35,12 +35,11 @@
   "depends": {
     "fabricloader": ">=${min_fabricloader_version}",
     "fabric": ">=${min_fabric_version}",
-    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}",
-    "cloth-config2": ">=${min_cloth_config_version}"
+    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}"
   },
   "recommends": {
+    "cloth-config2": ">=${min_cloth_config_version}",
     "modmenu": ">=${min_modmenu_version}"
   }
-
 }
 

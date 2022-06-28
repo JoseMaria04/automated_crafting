@@ -24,7 +24,7 @@ public class ClientInit implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(Registrar.BLOCK, RenderLayer.getSolid());
         // don't be fooled, specifying the generics' types is necessary here
         ScreenRegistry.<AutoCrafterGuiDescription, AutoCrafterScreen>register(Registrar.SCREEN_HANDLER_TYPE, (gui, playerInventory, titleText) -> new AutoCrafterScreen(gui, playerInventory.player, titleText));
-        CrowdinTranslate.downloadTranslations("automated-crafting", AutomatedCrafting.NAMESPACE);
+        if (FeatureControl.shouldFetchTranslationUpdates()) CrowdinTranslate.downloadTranslations("automated-crafting", AutomatedCrafting.NAMESPACE);
 
         ModContainer modContainer = FabricLoader.getInstance().getModContainer(AutomatedCrafting.NAMESPACE).get();
         registerBuiltinResourcePack(new Identifier(AutomatedCrafting.NAMESPACE, POWERED + "_icon"), modContainer, ResourcePackActivationType.NORMAL);

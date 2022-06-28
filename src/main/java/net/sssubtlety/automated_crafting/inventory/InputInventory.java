@@ -7,6 +7,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.sssubtlety.automated_crafting.Config;
+import net.sssubtlety.automated_crafting.FeatureControl;
 
 import static net.sssubtlety.automated_crafting.AutoCrafterBlockEntity.templatePredicate;
 
@@ -32,6 +33,6 @@ public class InputInventory extends CraftingView {
 
     protected boolean matchesTemplate(int slot, ItemStack inputStack) {
         boolean matches = templatePredicate(inputStack, this.templateInventory.getStack(slot));
-        return !Config.isSimpleMode() || matches;
+        return !FeatureControl.isSimpleMode() || matches;
     }
 }

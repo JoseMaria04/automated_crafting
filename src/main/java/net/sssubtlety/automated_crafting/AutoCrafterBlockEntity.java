@@ -193,7 +193,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     }
 
     protected void tryPlayFailSound() {
-        if (world != null && !Config.doesCraftContinuously())
+        if (world != null && !FeatureControl.doesCraftContinuously())
             world.syncWorldEvent(1001, pos, 0);
     }
 
@@ -212,7 +212,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
             return Optional.empty();
         }
 
-        if (Config.isSimpleMode() && inputMisMatchesTemplate()) return Optional.empty();
+        if (FeatureControl.isSimpleMode() && inputMisMatchesTemplate()) return Optional.empty();
 
         if(
             recipeCache == null ||
@@ -235,7 +235,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected void tryCraftContinuously() {
         if (
-            Config.doesCraftContinuously() &&
+                FeatureControl.doesCraftContinuously() &&
             world != null &&
             world.getBlockState(pos).get(AutoCrafterBlock.POWERED)
         ) tryCraft();
@@ -258,7 +258,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     @Override
     public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        if (slot == Slots.OUTPUT_SLOT || !Config.isSimpleMode()) return true;
+        if (slot == Slots.OUTPUT_SLOT || !FeatureControl.isSimpleMode()) return true;
 
         int inputSlot = Slots.toInputSlot(slot);
         return CraftingView.Grid.contains(inputSlot) && misMatchesTemplate(inputSlot, stack);
@@ -372,7 +372,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     }
 
     public int getComparatorOutput() {
-        if (Config.doesComparatorReadOutput() && !output.isEmpty()) return 15;
+        if (FeatureControl.doesComparatorReadOutput() && !output.isEmpty()) return 15;
         return inputInventory.getComparatorOutput();
     }
 

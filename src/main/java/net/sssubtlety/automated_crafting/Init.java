@@ -8,7 +8,7 @@ import static net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.E
 public class Init implements ModInitializer {
     @Override
     public void onInitialize() {
-        Config.init();
+        FeatureControl.init();
         Registrar.init();
         AutoCrafterGuiDescription.init();
 

@@ -17,6 +17,7 @@ import net.minecraft.screen.slot.SlotActionType;
 import net.minecraft.text.Text;
 import net.sssubtlety.automated_crafting.AutoCrafterBlockEntity;
 import net.sssubtlety.automated_crafting.Config;
+import net.sssubtlety.automated_crafting.FeatureControl;
 import net.sssubtlety.automated_crafting.Registrar;
 import net.sssubtlety.automated_crafting.inventory.CraftingView;
 import org.jetbrains.annotations.NotNull;
@@ -38,7 +39,7 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
     public void onSlotClick(int slotNumber, int button, SlotActionType action, PlayerEntity player) {
         if (
             action == SlotActionType.QUICK_MOVE &&
-            Config.isSimpleMode()
+                    FeatureControl.isSimpleMode()
         ) {
             if (slotNumber < AutoCrafterBlockEntity.Slots.INPUT_START) {
                 // prevent duping items when shift-clicking out of template
@@ -61,7 +62,7 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
         root.setInsets(Insets.ROOT_PANEL);
         instance.setRootPanel(root);
 
-        if (Config.isSimpleMode()) populateSimple(inventory, root);
+        if (FeatureControl.isSimpleMode()) populateSimple(inventory, root);
         else populateComplex(inventory, root);
 
         root.add(instance.createPlayerInventoryPanel(), 0, PLAYER_INVENTORY_Y);

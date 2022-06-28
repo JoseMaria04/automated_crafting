@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
 
-public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntityProvider {
+public class AutoCrafterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier("automated_crafting", "auto_crafter");
     public static final BooleanProperty POWERED = BooleanProperty.of("powered");
     public static final BooleanProperty ACTIVATED = BooleanProperty.of("activated");
@@ -35,7 +35,7 @@ public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntity
     }
 
     protected boolean isPowered(World world, BlockPos pos) {
-        return world.isReceivingRedstonePower(pos) || Config.isQuasiConnected() && world.isReceivingRedstonePower(pos.up());
+        return world.isReceivingRedstonePower(pos) || FeatureControl.isQuasiConnective() && world.isReceivingRedstonePower(pos.up());
     }
 
     protected void tryCraft(ServerWorld world, BlockPos pos) {
@@ -89,7 +89,7 @@ public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntity
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
-        if (!Config.doesCraftContinuously() && state.get(ACTIVATED))
+        if (!FeatureControl.doesCraftContinuously() && state.get(ACTIVATED))
             world.setBlockState(pos, state.with(ACTIVATED, false), 2);
 
         tryCraft(world, pos);
@@ -124,7 +124,7 @@ public class AutoCrafterBlock extends BlockWithEntity { //implements BlockEntity
 
     @Override
     public boolean emitsRedstonePower(BlockState state) {
-        return Config.doesRedirectRedstone();
+        return FeatureControl.doesRedirectRedstone();
     }
 
     @Override

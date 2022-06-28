@@ -36,7 +36,7 @@ dependencies {
 	bundledMod "io.github.cottonmc:LibGui:$project.libgui_version"
 
 	//Config library
-	dependedMod "me.shedaniel.cloth:cloth-config-fabric:", "cloth_config"
+	suggestedMod false, "me.shedaniel.cloth:cloth-config-fabric:", "cloth_config"
 	// Config menu support
 	suggestedMod true, "com.terraformersmc:modmenu:", "modmenu"
 	// translation fetching
