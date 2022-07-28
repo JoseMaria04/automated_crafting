@@ -1,3 +1,4 @@
+- 1.4.6 (27 Jul. 2022): Marked as compatible with 1.19.1
 - 1.4.5 (27 Jun. 2022):
   - Updated for 1.19!
   - Cloth Config is now optional
