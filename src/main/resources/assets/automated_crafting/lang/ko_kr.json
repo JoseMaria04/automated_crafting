@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "자동 제작대",
+  "block.automated_crafting.auto_crafter": "자동 제작대",
+  "label.automated_crafting.template": "템플릿",
+  "label.automated_crafting.input": "입력",
+  "text.autoconfig.automated_crafting.title": "자동 제작대 환경 설정",
+  "text.autoconfig.automated_crafting.option.simple_mode": "단순 모드 활성화",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "단순 모드에서는 조합법 템플릿을 설정할 수 있습니다",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "준-연결성 활성화",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "만약 자동 제작대 위에 있는 블럭이 전력을 공급받으면, 자동 제작대도 전력을 공급받습니다 (단 동작하지는 않습니다)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "레드스톤 가루 방향 전환 활성화",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "자동 제작대 옆에 위치한 레드스톤 가루를 자동 제작대를 향하게 합니다",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "전력을 공급받는 동안 연속하여 제작하기",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "자동 제작대가 전력을 받으며 올바른 조합법을 가지고 있으면, 그 조합법은 즉시 조합됩니다",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "출력이 존재할 경우 비교기에 15의 신호를 출력하기",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "자동 제작대를 인식하는 비교기는 출력 칸에 아이템이 있을 경우 15의 신호를 인식합니다",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

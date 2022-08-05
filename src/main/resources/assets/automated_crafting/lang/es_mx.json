@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Mesa de trabajo Automatizada",
+  "block.automated_crafting.auto_crafter": "Mesa de trabajo Automatizada",
+  "label.automated_crafting.template": "Plantilla",
+  "label.automated_crafting.input": "Entrada",
+  "text.autoconfig.automated_crafting.title": "Configuracion de la Mesa de trabajo Automatizada",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Habilitar modo simple",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "En el modo simple se puede establecer un modelo de receta",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Habilitar la Casi-Conectividad",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "Si el bloque que se encuentra encima de un autocrafter está alimentado, el autocrafter es alimentado (pero no actualizado)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Habilitar la redirección de polvo de Redstone",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "El polvo de redstone al lado de un autocrafter apuntará al autocrafter",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Fabrica continuamente mientras está encendido",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Cuando un autocrafter está activado y contiene una receta válida, esa receta será elaborada inmediatamente",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "El comparador lee 15 si la salida no está vacía",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Un comparador que lea un autocrafter con cualquier cosa en su ranura de salida leerá 15",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

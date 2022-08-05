@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "自動作業台",
+  "block.automated_crafting.auto_crafter": "自動作業台",
+  "label.automated_crafting.template": "テンプレート",
+  "label.automated_crafting.input": "入力",
+  "text.autoconfig.automated_crafting.title": "自動クラフトの設定",
+  "text.autoconfig.automated_crafting.option.simple_mode": "シンプルモードを有効化",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "シンプルモードではレシピテンプレートを設定できます",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "準接続を有効化",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "オートクレーターの上にあるブロックに電源を入れると、自動クレーターに電源が入ります(ただし更新されません)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "レッドストーンのダストリダイレクトを有効にする",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "オートの隣にあるレッドストーンのほこりは、クレーターがオートクレーターを指します",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "電源投入時に継続してクラフト",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "自動クラフターの電源が入っていて、有効なレシピが含まれている場合、そのレシピはすぐに作成されます",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "コンパレータは、出力が空ではない場合は15を読み込みます。",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "出力スロットに何でもオートクレープを読み込むコンパレータは15を読み込みます。",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

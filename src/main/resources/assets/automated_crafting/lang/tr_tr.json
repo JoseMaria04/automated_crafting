@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Otomatik Çalışma Masası",
+  "block.automated_crafting.auto_crafter": "Otomatik Çalışma Masası",
+  "label.automated_crafting.template": "Taslak",
+  "label.automated_crafting.input": "Giriş",
+  "text.autoconfig.automated_crafting.title": "Otomatik Üretim Konfigrasyonu",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Basit Modu Aktifleştir",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "Basit modda üretim taslağını ayarlayabilirsiniz",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Quasi-Bağlantıyı Aktifleştir",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "Eğer otomatik üreticinin üstündeki bloğa güç verilirse, otomatik üretici de güç alacaktır. (Fakat güncellenmedi)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Kızıltaşı Tozu Yönlendirmesini Aktifleştir",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "Otomatik üreticinin yanındaki kızıltaşı tozu üreticiye bağlanacaktır",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Güç veriliyken üretime devam ediniz",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Üreticiye güç verildiğinde ve geçerli bir üretim taslağı ayarlandığında, üretim anında başlayacaktır",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "Eğer çıkış boş değilse karşılaştırıcı 15 okur",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Otomatik üreticinin çıkış boşluğunda ürün olduğunu okuyan bir karşılaştırıcı 15 puan sinyal okur",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

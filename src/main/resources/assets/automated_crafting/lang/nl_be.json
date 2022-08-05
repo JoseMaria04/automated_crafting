@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Automated Crafting Table",
+  "block.automated_crafting.auto_crafter": "Automated Crafting Table",
+  "label.automated_crafting.template": "Template",
+  "label.automated_crafting.input": "Input",
+  "text.autoconfig.automated_crafting.title": "Automated Crafting Configuration",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Enable Simple Mode",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "In simple mode you can set a recipe template",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Enable Quasi-Connectivity",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "If the block above an auto crafter would be powered, the auto crafter is powered (but not updated)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Enable Redstone Dust Redirection",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "Redstone dust next to auto an crafter will point into the auto crafter",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Craft Continuously While Powered",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "When an auto crafter is powered and contains a valid recipe, that recipe will be crafted immediately",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "Comparator reads 15 if output isn't empty",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "A comparator reading an auto crafter with anything in its output slot will read 15",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

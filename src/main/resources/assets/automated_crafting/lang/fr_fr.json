@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Table de Crafting Automatique",
+  "block.automated_crafting.auto_crafter": "Table de Crafting Automatique",
+  "label.automated_crafting.template": "Modèle",
+  "label.automated_crafting.input": "Entrée",
+  "text.autoconfig.automated_crafting.title": "Configuration de la Table de Crafting Automatique",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Activer le Mode Simple",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "En mode simple, vous pouvez définir un modèle de recette",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Activer la Quasi-Connectivity",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "Si le bloc au-dessus de la Table de Crafting Automatique est alimenté, la Table de Crafting Automatique est alimenté (mais pas mis à jour)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Activer La Redirection de Poudre de Redstone",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "La poussière de redstone à côté d'une Table de Crafting Automatique se dirigera vers elle",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Craft en continu lors qu'elle est activée",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Quand une Table de Crafting Automatique est alimenté et contient une recette valide, cette recette sera fabriquée immédiatement",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "Le Comparateur interprète 15 si la sortie n'est pas vide",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Un comparateur lisant une Table de Crafting Automatique avec n'importe quoi dans son emplacement de sortie lira 15",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}

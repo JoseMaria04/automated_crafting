@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "自动化工作台",
+  "block.automated_crafting.auto_crafter": "自动合成台",
+  "label.automated_crafting.template": "模板",
+  "label.automated_crafting.input": "输入",
+  "text.autoconfig.automated_crafting.title": "自动化工作台配置",
+  "text.autoconfig.automated_crafting.option.simple_mode": "启用简单模式",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "在简单模式下，你可以设置配方模板",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "启用半连接性",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "如果自动化工作台上方的方块能被充能，则自动化工作台被充能（但不更新）",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "启用红石粉重定向",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "自动化工作台旁边的红石粉将会指向自动化工作台",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "被红石粉充能时持续合成操作",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "当自动化工作台被充能并包含有效配方时，该配方将被立即制作",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "如果输出不为空，则比较器输出 15 级信号",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "一个比较器读取一个输出槽中拥有物品的自动化工作台时，将会输出 15 级信号",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
+  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
+  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+}
