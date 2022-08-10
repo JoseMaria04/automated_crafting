@@ -58,6 +58,6 @@ New translations will be added once approved without the mod needing an update t
 
 </details>
 
-This mod is only for Fabric and I won't be porting it to Forge. The license is [MIT](https://will-lucic.mit-license.org/), however, so anyone else is free to port it. 
+This mod is only for Fabric (works on Quilt, too!) and I won't be porting it to Forge. The license is [MIT](https://will-lucic.mit-license.org/), however, so anyone else is free to port it. 
 
 I'd appreciate links back to this page if you port or otherwise modify this project, but links aren't required. 
