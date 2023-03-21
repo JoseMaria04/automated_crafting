@@ -12,7 +12,11 @@ buildscript {
 }
 
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+//	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.0-SNAPSHOT'
+
+//	id 'org.quiltmc.loom' version '1.+'
+
 	id 'maven-publish'
 	// Quilt mappings
 	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.0'

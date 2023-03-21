@@ -133,7 +133,7 @@ public abstract class CraftingView extends CraftingInventory implements Trimmabl
         }
 
         @Override
-        public ItemStack transferSlot(PlayerEntity player, int index) {
+        public ItemStack quickTransfer(PlayerEntity player, int fromIndex) {
             return ItemStack.EMPTY;
         }
 

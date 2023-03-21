@@ -167,7 +167,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
         Optional<Recipe<CraftingInventory>> optRecipe = getRecipe();
         if(optRecipe.isPresent()) {
             Recipe<CraftingInventory> recipe = optRecipe.get();
-            ItemStack output1 = recipe.craft(templateInventory);
+            ItemStack output1 = recipe.craft(templateInventory, this.world.getRegistryManager());
             OutputAction outputAction = checkOutput(output1);
             if(outputAction != OutputAction.FAIL) {
                 DefaultedList<ItemStack> remainingStacks = recipe.getRemainder(this.inputInventory);
@@ -199,7 +199,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected OutputAction checkOutput(ItemStack output) {
         if (this.output.isEmpty()) return OutputAction.SET;
-        else if (output.isItemEqual(this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
+        else if (output.isItemEqualIgnoreDamage(this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
             //outputs are same item and output can fit in stack
             return OutputAction.INCREMENT;
 
