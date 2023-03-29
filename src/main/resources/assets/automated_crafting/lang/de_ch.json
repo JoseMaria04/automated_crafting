@@ -1,5 +1,5 @@
 {
-  "text.automated_crafting.name": "Automated Crafting",
+  "text.automated_crafting.name": "Automatisiertes Herstellen",
   "item.automated_crafting.auto_crafter": "Automatische Werkbank",
   "block.automated_crafting.auto_crafter": "Automatische Werkbank",
   "label.automated_crafting.template": "Vorlage",
@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Wenn eine automatische Werkbank aktiv ist und ein valides Rezept enthält, wird das Rezept sofort hergestellt",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "Komparator liest 15, wenn die Ausgabe nicht leer ist",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Ein Komparator, der eine automatische Werkbank ausliest, gibt ein Signal von 15 aus, wenn diese etwas im Ausgabe-Slot hat",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
-  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
-  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Updates für Übersetzungen herunterladen",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Übersetzungen von Crowdin beim Start des Spiels herunterladen",
+  "text.automated_crafting.no_config_screen.title": "${name} Konfiguration nicht verfügbar",
+  "text.automated_crafting.no_config_screen.message": "§cInstalliere Cloth Config um die Personalisierung zu aktivieren."
 }

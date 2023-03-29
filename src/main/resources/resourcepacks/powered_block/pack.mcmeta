@@ -1,6 +1,6 @@
 ﻿{
   "pack": {
-    "pack_format": 8,
+    "pack_format": 13,
     "description": "Auto Crafter shows activated texture while receiving redstone power, rather than while activated. This won't make a difference unless 'Craft continuously while powered' is false/no. "
   }
 }

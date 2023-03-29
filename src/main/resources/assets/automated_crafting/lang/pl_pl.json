@@ -3,7 +3,7 @@
   "item.automated_crafting.auto_crafter": "Zautomatyzowany stół rzemieślniczy",
   "block.automated_crafting.auto_crafter": "Zautomatyzowany stół rzemieślniczy",
   "label.automated_crafting.template": "Wzór",
-  "label.automated_crafting.input": "Input",
+  "label.automated_crafting.input": "Wejście",
   "text.autoconfig.automated_crafting.title": "Konfiguracja automatycznego wytwarzania",
   "text.autoconfig.automated_crafting.option.simple_mode": "Włącz tryb uproszczony",
   "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "W prostym trybie można ustawić szablon przepisu",
@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "When an auto crafter is powered and contains a valid recipe, that recipe will be crafted immediately",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "Comparator reads 15 if output isn't empty",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Wyjście komparatora czytającego automatyczny stół z czymkolwiek w slocie wyjściowym wyniesie 15",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
-  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
-  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Pobierz aktualizacje tłumaczeń",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Pobierz tłumaczenia z Crowdin po uruchomieniu gry",
+  "text.automated_crafting.no_config_screen.title": "Konfiguracja ${name} jest niedostępna",
+  "text.automated_crafting.no_config_screen.message": "§cZainstaluj Cloth Config, aby włączyć konfigurację."
 }

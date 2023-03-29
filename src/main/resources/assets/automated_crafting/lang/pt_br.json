@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Quando uma bancada automatizada é energizada e contém uma receita válida, essa receita será criada imediatamente",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "O comparador lê 15 se a saída não estiver vazia",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Um comparador lendo uma bancada automatizada que tenha qualquer coisa no espaço de saída irá ler o valor 15",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
-  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
-  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Instale as atualizações de tradução",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Instale as traduções do Crowdin quando o terminar de carregar",
+  "text.automated_crafting.no_config_screen.title": "Configuração ${name} indisponível",
+  "text.automated_crafting.no_config_screen.message": "Instale Cloth Config para ativar as configurações."
 }

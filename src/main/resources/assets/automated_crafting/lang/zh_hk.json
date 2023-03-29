@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "当自动化工作台被充能并包含有效配方时，该配方将被立即制作",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "如果输出不为空，则比较器输出 15 级信号",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "一个比较器读取一个输出槽中拥有物品的自动化工作台时，将会输出 15 级信号",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
-  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
-  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "下载翻译更新",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "游戏启动时从 Crowdin 下载翻译",
+  "text.automated_crafting.no_config_screen.title": "“${name}”配置不可用",
+  "text.automated_crafting.no_config_screen.message": "安装“Cloth Config”以启用配置。"
 }
