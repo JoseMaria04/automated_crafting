@@ -1,3 +1,5 @@
+- 1.4.11 (28 Apr. 2023): Port medmenu log message prevention from 1.19.2 version
+- 1.4.10 (28 Apr. 2023): No longer logs a message recommending you install modmenu
 - 1.4.9 (29 Mar. 2023): Updated builtin resourcepack versions
 - 1.4.8 (20 Mar. 2023): Updated for 1.19.4
 - 1.4.7 (5 Aug. 2022): Marked as compatible with 1.19.2
