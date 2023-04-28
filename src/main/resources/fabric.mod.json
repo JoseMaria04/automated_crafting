@@ -38,7 +38,9 @@
     "minecraft": ">=${min_minecraft_version} <=${minecraft_version}"
   },
   "recommends": {
-    "cloth-config2": ">=${min_cloth_config_version}",
+    "cloth-config2": ">=${min_cloth_config_version}"
+  },
+  "suggests": {
     "modmenu": ">=${min_modmenu_version}"
   }
 }
