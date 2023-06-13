@@ -15,6 +15,7 @@ import net.minecraft.inventory.SidedInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
@@ -47,7 +48,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public static final MutableText NAME = Text.translatable("block.automated_crafting.auto_crafter");
 
     public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
-        return templateStack.isOf(inputStack.getItem()) && ItemStack.areNbtEqual(templateStack, inputStack);
+        return templateStack.isOf(inputStack.getItem()) && ItemStack.canCombine(templateStack, inputStack);
     }
 
     public static Storage<ItemVariant> getStorage(AutoCrafterBlockEntity blockEntity, Direction direction) {
@@ -78,7 +79,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
 
     protected final Validator.Validation validation;
-    protected Recipe<CraftingInventory> recipeCache;
+    protected CraftingRecipe recipeCache;
 
     public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
         super(Registrar.BLOCK_ENTITY_TYPE, pos, state);
@@ -164,9 +165,9 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 //            // means that this is the final markDirty, OK to update contents
 //        }
 
-        Optional<Recipe<CraftingInventory>> optRecipe = getRecipe();
+        Optional<CraftingRecipe> optRecipe = getRecipe();
         if(optRecipe.isPresent()) {
-            Recipe<CraftingInventory> recipe = optRecipe.get();
+            CraftingRecipe recipe = optRecipe.get();
             ItemStack output1 = recipe.craft(templateInventory, this.world.getRegistryManager());
             OutputAction outputAction = checkOutput(output1);
             if(outputAction != OutputAction.FAIL) {
@@ -199,14 +200,14 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected OutputAction checkOutput(ItemStack output) {
         if (this.output.isEmpty()) return OutputAction.SET;
-        else if (output.isItemEqualIgnoreDamage(this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
+        else if (ItemStack.canCombine(output, this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
             //outputs are same item and output can fit in stack
             return OutputAction.INCREMENT;
 
         return OutputAction.FAIL;
     }
 
-    protected Optional<Recipe<CraftingInventory>> getRecipe() {
+    protected Optional<CraftingRecipe> getRecipe() {
         if (world == null) {
             LOGGER.error("Trying to get recipe before world is initialized!");
             return Optional.empty();

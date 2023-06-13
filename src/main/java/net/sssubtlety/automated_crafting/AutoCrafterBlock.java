@@ -123,7 +123,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
     }
 
     @Override
-    public boolean emitsRedstonePower(BlockState state) {
+    public boolean isRedstonePowerSource(BlockState state) {
         return FeatureControl.doesRedirectRedstone();
     }
 
