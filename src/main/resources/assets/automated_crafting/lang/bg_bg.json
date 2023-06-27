@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Автоматизирана маса за crafting",
+  "block.automated_crafting.auto_crafter": "Автоматизирана маса за crafting",
+  "label.automated_crafting.template": "Шаблон",
+  "label.automated_crafting.input": "Вход",
+  "text.autoconfig.automated_crafting.title": "Automated Crafting Configuration",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Включи опростен режим",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "В опростения режим можеш да зададеш шаблон за рецепта",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Enable Quasi-Connectivity",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "If the block above an auto crafter would be powered, the auto crafter is powered (but not updated)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Enable Redstone Dust Redirection",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "Redstone dust next to auto an crafter will point into the auto crafter",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Craft Continuously While Powered",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Когато авто-crafter-а е включен и садържа валидна рецепта, тази рецепта ще бъде craft-ната веднага",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "Comparator reads 15 if output isn't empty",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "A comparator reading an auto crafter with anything in its output slot will read 15",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Свали обновение на превод",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Свали преводи от Crowdin когато играта стартира",
+  "text.automated_crafting.no_config_screen.title": "${name} Конфигурацията не е налична",
+  "text.automated_crafting.no_config_screen.message": "§cИнсталирай Cloth Config за да включиш конфигурацията."
+}
