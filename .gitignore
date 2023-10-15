@@ -24,8 +24,6 @@ bin/
 .classpath
 .project
 
-# fabric
-
-run-client/
-run-client/
-run-server/
+# custom
+run*/
+*.secret

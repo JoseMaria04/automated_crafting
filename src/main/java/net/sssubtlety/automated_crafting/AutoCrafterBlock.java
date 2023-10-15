@@ -15,7 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPointerImpl;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.random.RandomGenerator;
 import net.minecraft.world.World;
@@ -39,9 +38,10 @@ public class AutoCrafterBlock extends BlockWithEntity {
     }
 
     protected void tryCraft(ServerWorld world, BlockPos pos) {
-        BlockPointerImpl blockPointerImpl = new BlockPointerImpl(world, pos);
-        ((AutoCrafterBlockEntity)blockPointerImpl.getBlockEntity()).tryCraft();
-        world.updateNeighborsAlways(pos, this);
+        if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity) {
+            autoCrafterBlockEntity.tryCraft();
+            world.updateNeighborsAlways(pos, this);
+        }
     }
 
     @Override

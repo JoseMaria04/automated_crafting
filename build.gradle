@@ -12,16 +12,13 @@ buildscript {
 }
 
 plugins {
-//	id 'fabric-loom' version '0.12-SNAPSHOT'
 	id 'fabric-loom' version '1.0-SNAPSHOT'
-
 //	id 'org.quiltmc.loom' version '1.+'
 
 	id 'maven-publish'
 	// Quilt mappings
 	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.0'
-	// Quiltflower for decompiling Minecraft
-	id 'io.github.juuxel.loom-quiltflower' version '1.7.2'
+	id 'io.github.juuxel.loom-vineflower' version '1.11.0'
 }
 
 apply from: "https://gitlab.com/supersaiyansubtlety/mod_gradle_scripts/-/raw/$project.mod_gradle_scripts_ref/applyAll.gradle"
@@ -46,12 +43,10 @@ dependencies {
 	// translation fetching
 	bundledMod "de.guntram.mcmod:crowdin-translate:$project.crowdin_translate_version"
 
-	// speed up launching in dev
-	devRuntime "maven.modrinth:lazydfu:$project.lazy_dfu_version"
+	// dev convenience
 //	devRuntime "maven.modrinth:dashloader:$project.dashloader_version"
-
-	// remember window size+pos in dev
 	devRuntime "net.dblsaiko:winwonders:$project.winwonders_version"
+	devRuntime "maven.modrinth:global-options:$project.global_options_version"
 
 	//compat testing
 //	optionalMod true, "curse.maven:toms_storage_fabric-396826:3550445"

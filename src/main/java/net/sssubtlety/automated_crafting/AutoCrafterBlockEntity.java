@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
+import net.minecraft.recipe.RecipeHolder;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
@@ -221,7 +222,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
             !recipeCache.matches(inputInventory, world)
         ) {
             recipeCache = this.world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, inputInventory, this.world)
-                    .orElse(null);
+                .map(RecipeHolder::value).orElse(null);
         }
 
         return Optional.ofNullable(recipeCache);
@@ -236,7 +237,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected void tryCraftContinuously() {
         if (
-                FeatureControl.doesCraftContinuously() &&
+            FeatureControl.doesCraftContinuously() &&
             world != null &&
             world.getBlockState(pos).get(AutoCrafterBlock.POWERED)
         ) tryCraft();
