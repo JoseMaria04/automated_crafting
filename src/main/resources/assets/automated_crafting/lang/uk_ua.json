@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Коли автокрафтер запитан і містить дійсний рецепт, цей рецепт буде відразу ж створений",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "Компаратор видаватиме сигнал силою 15, якщо слот виходу не порожній",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Компаратор видаватиме сигнал редстоуну силою 15, якщо слот виходу міститиме предмет",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Завантажити оновлення перекладу",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Завантажити переклади з Crowdin під час запуску гри",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Завантажувати оновлення перекладу",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Завантажувати переклади з Crowdin під час запуску гри",
   "text.automated_crafting.no_config_screen.title": "${name} Конфігурація недоступна",
   "text.automated_crafting.no_config_screen.message": "§cВстановіть Cloth Config, щоб увімкнути конфігурацію."
 }
