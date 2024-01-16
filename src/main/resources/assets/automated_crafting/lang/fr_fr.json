@@ -15,8 +15,8 @@
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Quand une Table de Crafting Automatique est alimenté et contient une recette valide, cette recette sera fabriquée immédiatement",
   "text.autoconfig.automated_crafting.option.comparator_reads_output": "Le Comparateur interprète 15 si la sortie n'est pas vide",
   "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Un comparateur lisant une Table de Crafting Automatique avec n'importe quoi dans son emplacement de sortie lira 15",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Download translation updates",
-  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Download translations from Crowdin when the game launches",
-  "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
-  "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration."
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Télécharger les mises à jour des traductions",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Télécharger les traductions depuis Crowdin au lancement du jeu",
+  "text.automated_crafting.no_config_screen.title": "Configuration ${name} indisponible",
+  "text.automated_crafting.no_config_screen.message": "§cInstallez Cloth Config pour activer la configuration."
 }
