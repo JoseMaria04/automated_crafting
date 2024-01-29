@@ -1,9 +1,7 @@
 package net.sssubtlety.automated_crafting;
 
-import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.annotation.ConfigEntry;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
 

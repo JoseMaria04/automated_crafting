@@ -32,11 +32,11 @@ public class AutoCrafterBlock extends BlockWithEntity {
 
     public AutoCrafterBlock(Settings settings) {
         super(settings);
-        this.setDefaultState((((this.stateManager.getDefaultState()).with(POWERED, false).with(ACTIVATED, false))));
+        this.setDefaultState(this.stateManager.getDefaultState().with(POWERED, false).with(ACTIVATED, false));
     }
 
     @Override
-    protected MapCodec<? extends BlockWithEntity> method_53969() {
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
         return mapCodec;
     }
 
@@ -60,6 +60,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
         return BlockRenderType.MODEL;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
         if (world.isClient) {
@@ -75,6 +76,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean moved) {
         boolean isPowered = isPowered(world, pos);
@@ -94,6 +96,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
             world.setBlockState(pos, state.with(POWERED, false).with(ACTIVATED, false), 2);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
         if (!FeatureControl.doesCraftContinuously() && state.get(ACTIVATED))
@@ -102,6 +105,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
         tryCraft(world, pos);
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
@@ -114,11 +118,13 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity)
@@ -129,6 +135,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean isRedstonePowerSource(BlockState state) {
         return FeatureControl.doesRedirectRedstone();

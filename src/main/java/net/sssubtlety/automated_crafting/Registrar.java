@@ -1,15 +1,14 @@
 package net.sssubtlety.automated_crafting;
 
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.screenhandler.v1.ScreenHandlerRegistry;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.feature_flags.FeatureFlags;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -35,13 +34,16 @@ public class Registrar {
 
     public static BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE =
             Registry.register(
-                    Registries.BLOCK_ENTITY_TYPE,
-                NAMESPACE + ":auto_crafter_entity",
-                    FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK).build(null)
+                Registries.BLOCK_ENTITY_TYPE,
+            NAMESPACE + ":auto_crafter_entity",
+                FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK).build(null)
             );
 
     public static ScreenHandlerType<AutoCrafterGuiDescription> SCREEN_HANDLER_TYPE =
-            ScreenHandlerRegistry.registerSimple(AutoCrafterBlock.ID, (world, playerInventory) -> AutoCrafterGuiDescription.create(world, playerInventory, ScreenHandlerContext.EMPTY));
+        Registry.register(Registries.SCREEN_HANDLER_TYPE, AutoCrafterBlock.ID, new ScreenHandlerType<>(
+            (world, playerInventory) -> AutoCrafterGuiDescription.create(world, playerInventory, ScreenHandlerContext.EMPTY),
+            FeatureFlags.DEFAULT_SET)
+        );
 
     static {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE_BLOCKS).register(entries -> entries.addItem(ITEM));

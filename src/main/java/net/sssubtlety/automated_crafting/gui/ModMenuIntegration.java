@@ -25,8 +25,8 @@ public class ModMenuIntegration implements ModMenuApi {
     @Override
     public ConfigScreenFactory<?> getModConfigScreenFactory() {
         return isConfigLoaded() ?
-                parent -> AutoConfig.getConfigScreen(Config.class, parent).get() :
-                NoConfigScreen::new;
+            parent -> AutoConfig.getConfigScreen(Config.class, parent).get() :
+            NoConfigScreen::new;
     }
 
     public static class NoConfigScreen extends Screen {
@@ -43,17 +43,17 @@ public class ModMenuIntegration implements ModMenuApi {
             final int windowHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
 
             graphics.drawCenteredShadowedText(
-                    MinecraftClient.getInstance().textRenderer,
-                    Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.get()),
-                    windowHCenter, windowHeight / 10,
-                    Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
+                MinecraftClient.getInstance().textRenderer,
+                Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.get()),
+                windowHCenter, windowHeight / 10,
+                Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
             );
 
             graphics.drawCenteredShadowedText(
-                    MinecraftClient.getInstance().textRenderer,
-                    NO_CONFIG_SCREEN_MESSAGE,
-                    windowHCenter, windowHeight / 2,
-                    Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
+                MinecraftClient.getInstance().textRenderer,
+                NO_CONFIG_SCREEN_MESSAGE,
+                windowHCenter, windowHeight / 2,
+                Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
             );
         }
 

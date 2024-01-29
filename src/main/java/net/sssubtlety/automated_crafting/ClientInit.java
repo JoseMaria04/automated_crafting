@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.client.gui.screen.ingame.HandledScreens;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.util.Identifier;
 import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
@@ -23,10 +24,12 @@ public class ClientInit implements ClientModInitializer {
     public void onInitializeClient() {
         BlockRenderLayerMap.INSTANCE.putBlock(Registrar.BLOCK, RenderLayer.getSolid());
         // don't be fooled, specifying the generics' types is necessary here
-        ScreenRegistry.<AutoCrafterGuiDescription, AutoCrafterScreen>register(Registrar.SCREEN_HANDLER_TYPE, (gui, playerInventory, titleText) -> new AutoCrafterScreen(gui, playerInventory.player, titleText));
+        HandledScreens.<AutoCrafterGuiDescription, AutoCrafterScreen>register(Registrar.SCREEN_HANDLER_TYPE,
+            (gui, playerInventory, titleText) -> new AutoCrafterScreen(gui, playerInventory.player, titleText)
+        );
         if (FeatureControl.shouldFetchTranslationUpdates()) CrowdinTranslate.downloadTranslations("automated-crafting", AutomatedCrafting.NAMESPACE);
 
-        ModContainer modContainer = FabricLoader.getInstance().getModContainer(AutomatedCrafting.NAMESPACE).get();
+        ModContainer modContainer = FabricLoader.getInstance().getModContainer(AutomatedCrafting.NAMESPACE).orElseThrow();
         registerBuiltinResourcePack(new Identifier(AutomatedCrafting.NAMESPACE, POWERED + "_icon"), modContainer, ResourcePackActivationType.NORMAL);
         registerBuiltinResourcePack(new Identifier(AutomatedCrafting.NAMESPACE, POWERED + "_block"), modContainer, ResourcePackActivationType.NORMAL);
     }
