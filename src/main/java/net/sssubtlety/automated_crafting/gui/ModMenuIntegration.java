@@ -54,7 +54,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 MinecraftClient.getInstance().textRenderer,
                 NO_CONFIG_SCREEN_MESSAGE,
                 windowHCenter, windowHeight / 2,
-                Formatting.WHITE.getColorValue()
+                Formatting.RED.getColorValue()
             );
         }
 
