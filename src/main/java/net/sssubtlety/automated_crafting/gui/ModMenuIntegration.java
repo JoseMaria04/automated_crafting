@@ -44,14 +44,14 @@ public class ModMenuIntegration implements ModMenuApi {
             final int windowHeight = MinecraftClient.getInstance().getWindow().getScaledHeight();
 
             graphics.drawCenteredShadowedText(
-                MinecraftClient.getInstance().textRenderer,
+                this.textRenderer,
                 Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.getString()),
                 windowHCenter, windowHeight / 10,
                 Formatting.WHITE.getColorValue()
             );
 
             graphics.drawCenteredShadowedText(
-                MinecraftClient.getInstance().textRenderer,
+                this.textRenderer,
                 NO_CONFIG_SCREEN_MESSAGE,
                 windowHCenter, windowHeight / 2,
                 Formatting.RED.getColorValue()
