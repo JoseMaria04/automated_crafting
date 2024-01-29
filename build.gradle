@@ -44,7 +44,6 @@ dependencies {
 	bundledMod "de.guntram.mcmod:crowdin-translate:$project.crowdin_translate_version"
 
 	// dev convenience
-//	devRuntime "maven.modrinth:dashloader:$project.dashloader_version"
 	devRuntime "net.dblsaiko:winwonders:$project.winwonders_version"
 	devRuntime "maven.modrinth:global-options:$project.global_options_version"
 

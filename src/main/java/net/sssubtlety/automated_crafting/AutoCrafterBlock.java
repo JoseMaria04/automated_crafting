@@ -1,5 +1,6 @@
 package net.sssubtlety.automated_crafting;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -23,6 +24,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier("automated_crafting", "auto_crafter");
     public static final BooleanProperty POWERED = BooleanProperty.of("powered");
     public static final BooleanProperty ACTIVATED = BooleanProperty.of("activated");
+    private static final MapCodec<AutoCrafterBlock> mapCodec = method_54094(AutoCrafterBlock::new);
 
     protected static void logWrongBlockEntityError() {
         AutomatedCrafting.LOGGER.error("AutoCrafterBlock found block entity that was not an AutoCrafterBlockEntity.");
@@ -31,6 +33,11 @@ public class AutoCrafterBlock extends BlockWithEntity {
     public AutoCrafterBlock(Settings settings) {
         super(settings);
         this.setDefaultState((((this.stateManager.getDefaultState()).with(POWERED, false).with(ACTIVATED, false))));
+    }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> method_53969() {
+        return mapCodec;
     }
 
     protected boolean isPowered(World world, BlockPos pos) {
