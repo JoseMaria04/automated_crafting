@@ -1,3 +1,6 @@
+- 1.4.16 (29 Jan. 2024):
+  - Updated for 1.20.3 and 1.20.4
+  - Minor internal changes
 - 1.4.15 (11 Dec. 2023): Updated bundled LibGUI, fixes #40 (crash on dedicated server)
 - 1.4.14 (15 Oct. 2023): Updated for 1.20.2
 - 1.4.13 (13 Jun. 2023): Marked as compatible with 1.20.1!
