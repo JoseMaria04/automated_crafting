@@ -10,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.sssubtlety.automated_crafting.AutomatedCrafting;
 import net.sssubtlety.automated_crafting.Config;
 import net.sssubtlety.automated_crafting.Util;
@@ -46,14 +47,14 @@ public class ModMenuIntegration implements ModMenuApi {
                 MinecraftClient.getInstance().textRenderer,
                 Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.getString()),
                 windowHCenter, windowHeight / 10,
-                Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
+                Formatting.WHITE.getColorValue()
             );
 
             graphics.drawCenteredShadowedText(
                 MinecraftClient.getInstance().textRenderer,
                 NO_CONFIG_SCREEN_MESSAGE,
                 windowHCenter, windowHeight / 2,
-                Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
+                Formatting.WHITE.getColorValue()
             );
         }
 

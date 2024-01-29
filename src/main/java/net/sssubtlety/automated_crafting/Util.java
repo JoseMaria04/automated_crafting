@@ -12,13 +12,6 @@ import net.minecraft.util.Formatting;
 import java.util.Optional;
 
 public final class Util {
-    @SuppressWarnings("ConstantConditions")
-    public static int getRgb(Text text) {
-        final TextColor color = text.getStyle().getColor();
-        if (color == null) return Formatting.WHITE.getColorValue();
-        else return color.getRgb();
-    }
-
     public static Text replace(Text text, String regex, String replacement) {
         String string = text.getString();
         string = string.replaceAll(regex, replacement);
