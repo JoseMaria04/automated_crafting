@@ -44,7 +44,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
             graphics.drawCenteredShadowedText(
                 MinecraftClient.getInstance().textRenderer,
-                Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.get()),
+                Util.replace(NO_CONFIG_SCREEN_TITLE, "\\$\\{name\\}", AutomatedCrafting.NAME.getString()),
                 windowHCenter, windowHeight / 10,
                 Util.getRgb(NO_CONFIG_SCREEN_MESSAGE)
             );

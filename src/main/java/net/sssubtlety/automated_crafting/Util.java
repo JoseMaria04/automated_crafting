@@ -25,12 +25,6 @@ public final class Util {
         return Text.literal(string).setStyle(text.getStyle());
     }
 
-    public record TranslatableString(String key) {
-        public String get() {
-            return I18n.translate(key);
-        }
-    }
-
     public static boolean isModLoaded(String id, String versionPredicate) {
         final Optional<ModContainer> optModContainer = FabricLoader.getInstance().getModContainer(id);
         if (optModContainer.isPresent()){

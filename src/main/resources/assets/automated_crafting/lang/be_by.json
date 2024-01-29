@@ -1,0 +1,22 @@
+{
+  "text.automated_crafting.name": "Automated Crafting",
+  "item.automated_crafting.auto_crafter": "Аўтаматызаваны варштат",
+  "block.automated_crafting.auto_crafter": "Аўтаматызаваны варштат",
+  "label.automated_crafting.template": "Шаблон",
+  "label.automated_crafting.input": "Увод",
+  "text.autoconfig.automated_crafting.title": "Канфігурацыя Automated Crafting",
+  "text.autoconfig.automated_crafting.option.simple_mode": "Уключыць просты рэжым",
+  "text.autoconfig.automated_crafting.option.simple_mode.@Tooltip": "У простым рэжыме вы можаце ўстанавіць шаблон рэцэпту",
+  "text.autoconfig.automated_crafting.option.quasi_connective": "Уключыць квазізлучальнасць",
+  "text.autoconfig.automated_crafting.option.quasi_connective.@Tooltip": "Калі блок над аўтакрафтарам будзе засілкованы, то аўтакрафтар таксама засілкованы (але не абнаўляецца)",
+  "text.autoconfig.automated_crafting.option.redirect_redstone": "Уключыць перанакіраванне рэдстоўнавага пылу",
+  "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip": "Рэдстоўнавы пыл побач з аўтакрафтарам будзе падключан да яго",
+  "text.autoconfig.automated_crafting.option.craft_continuously": "Бесперапынна стварайце, пакуль засілкованы",
+  "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip": "Калі аўтакрафтар засілкованы і змяшчае сапраўдны рэцэпт, то гэты рэцэпт будзе адразу ж створаны",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output": "Кампаратар будзе выдаваць сігнал сілай 15, калі слот вываду не пусты",
+  "text.autoconfig.automated_crafting.option.comparator_reads_output.@Tooltip": "Кампаратар будзе выдаваць сігнал рэдстоўна сілай 15, калі слот вываду будзе змяшчаць прадмет",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates": "Спампаваць абнаўлення перакладу",
+  "text.autoconfig.automated_crafting.option.fetch_translation_updates.@Tooltip": "Спампаваць пераклады з Crowdin пакуль гульня запускаецца",
+  "text.automated_crafting.no_config_screen.title": "Канфігурацыя ${name} недаступная",
+  "text.automated_crafting.no_config_screen.message": "§cУсталюйце Cloth Config для ўключэння канфігурацыі."
+}
