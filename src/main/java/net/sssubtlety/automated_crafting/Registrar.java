@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.MapColor;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.datafixer.TypeReferences;
 import net.minecraft.feature_flags.FeatureFlags;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -17,26 +18,42 @@ import net.minecraft.registry.Registry;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.Util;
 import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
 
 import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
 
-@SuppressWarnings("UnstableApiUsage")
 public class Registrar {
-    static void init() { }
+    static void init() {
+        ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE_BLOCKS).register(entries -> entries.addItem(ITEM));
+        ItemStorage.SIDED.registerForBlockEntity(AutoCrafterBlockEntity::getStorage, BLOCK_ENTITY_TYPE);
+    }
 
-    //     public Material(MapColor color, boolean liquid, boolean solid, boolean blocksMovement, boolean blocksLight, boolean burnable, boolean replaceable, PistonBehavior pistonBehavior) {
-    public static Block BLOCK = Registry.register(Registries.BLOCK, AutoCrafterBlock.ID, new AutoCrafterBlock(AbstractBlock.Settings.create().mapColor(MapColor.GRAY).solid().pistonBehavior( PistonBehavior.BLOCK).strength(1, 3)));
+    public static final Identifier BLOCK_ENTITY_ID = new Identifier(NAMESPACE, "auto_crafter_entity");
 
-    public static BlockItem ITEM = Registry.register(Registries.ITEM, new Identifier(NAMESPACE, "auto_crafter"),
-            new BlockItem(Registrar.BLOCK, new Item.Settings()));
+    public static Block BLOCK = Registry.register(
+        Registries.BLOCK,
+        AutoCrafterBlock.ID,
+        new AutoCrafterBlock(AbstractBlock.Settings.create()
+            .mapColor(MapColor.GRAY)
+            .solid()
+            .pistonBehavior(PistonBehavior.BLOCK)
+            .strength(1, 3)
+        )
+    );
 
+    public static BlockItem ITEM = Registry.register(
+        Registries.ITEM,
+        new Identifier(NAMESPACE, "auto_crafter"),
+        new BlockItem(Registrar.BLOCK, new Item.Settings())
+    );
 
     public static BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE =
             Registry.register(
                 Registries.BLOCK_ENTITY_TYPE,
-            NAMESPACE + ":auto_crafter_entity",
-                FabricBlockEntityTypeBuilder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK).build(null)
+                BLOCK_ENTITY_ID,
+                BlockEntityType.Builder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK)
+                    .build(Util.getChoiceType(TypeReferences.BLOCK_ENTITY, BLOCK_ENTITY_ID.toString()))
             );
 
     public static ScreenHandlerType<AutoCrafterGuiDescription> SCREEN_HANDLER_TYPE =
@@ -44,9 +61,4 @@ public class Registrar {
             (world, playerInventory) -> AutoCrafterGuiDescription.create(world, playerInventory, ScreenHandlerContext.EMPTY),
             FeatureFlags.DEFAULT_SET)
         );
-
-    static {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE_BLOCKS).register(entries -> entries.addItem(ITEM));
-        ItemStorage.SIDED.registerForBlockEntity(AutoCrafterBlockEntity::getStorage, BLOCK_ENTITY_TYPE);
-    }
 }

@@ -10,11 +10,11 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.Direction;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Iterator;
 
-@SuppressWarnings("UnstableApiUsage")
 public class ReactiveStorage extends SnapshotParticipant<DefaultedList<ItemStack>> implements Storage<ItemVariant> {
     private final Storage<ItemVariant> delegate;
     private final Inventory inventory;
@@ -37,7 +37,7 @@ public class ReactiveStorage extends SnapshotParticipant<DefaultedList<ItemStack
     }
 
     @Override
-    public Iterator<StorageView<ItemVariant>> iterator() {
+    public @NotNull Iterator<StorageView<ItemVariant>> iterator() {
         return delegate.iterator();
     }
 

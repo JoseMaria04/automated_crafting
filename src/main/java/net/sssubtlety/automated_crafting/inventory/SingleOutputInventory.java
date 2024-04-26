@@ -1,13 +1,11 @@
 package net.sssubtlety.automated_crafting.inventory;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-@SuppressWarnings("ALL")
 public class SingleOutputInventory extends SimpleInventory {
     public final Storage<ItemVariant> storage;
     public SingleOutputInventory(Runnable onChange) {

@@ -28,8 +28,7 @@ import static net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription.Me
 public class AutoCrafterGuiDescription extends SyncedGuiDescription {
     public static final ArrayPropertyDelegate EMPTY_DELEGATE = new ArrayPropertyDelegate(0);
 
-    public static void init() {
-    }
+    public static void init() { }
 
     protected AutoCrafterGuiDescription(int syncId, PlayerInventory playerInventory, Inventory inventory) {
         super(Registrar.SCREEN_HANDLER_TYPE, syncId, playerInventory, inventory, EMPTY_DELEGATE);
@@ -37,18 +36,17 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
 
     @Override
     public void onSlotClick(int slotNumber, int button, SlotActionType action, PlayerEntity player) {
-        if (
-            action == SlotActionType.QUICK_MOVE &&
-                    FeatureControl.isSimpleMode()
-        ) {
+        if (action == SlotActionType.QUICK_MOVE && FeatureControl.isSimpleMode()) {
             if (slotNumber < AutoCrafterBlockEntity.Slots.INPUT_START) {
                 // prevent duping items when shift-clicking out of template
                 if (slotNumber >= 0) this.slots.get(slotNumber).setStack(ItemStack.EMPTY);
                 return;
-            } else
+            } else {
                 // prevent shift-clicking into auto crafter
                 if (slotNumber >= AutoCrafterBlockEntity.Slots.INVENTORY_SIZE) return;
+            }
         }
+
         super.onSlotClick(slotNumber, button, action, player);
     }
 
@@ -81,27 +79,20 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
 
     protected static void populateComplex(Inventory inventory, WPlainPanel root) {
         root.add(
-                createGrid(inventory, CraftingView.Grid.SIZE),
-                Measurements.COMPLEX_INPUT_X,
-                GRID_Y
+            createGrid(inventory, CraftingView.Grid.SIZE),
+            Measurements.COMPLEX_INPUT_X,
+            GRID_Y
         );
         addOutputSlot(root, COMPLEX_OUTPUT_X, inventory);
     }
 
     protected static void addSimpleInputGrid(WPlainPanel root, Inventory inventory) {
-//        WTemplatedSlot grid = WTemplatedSlot.of(
-//                inventory, CraftingView.Grid.SIZE,
-//                inventory, -CraftingView.Grid.SIZE,
-//                CraftingView.Grid.WIDTH,
-//                CraftingView.Grid.HEIGHT
-//        );
-
         WItemSlot grid = createGrid(inventory, CraftingView.Grid.SIZE);
 
         root.add(
-                grid,
-                Measurements.SIMPLE_INPUT_X,
-                GRID_Y
+            grid,
+            Measurements.SIMPLE_INPUT_X,
+            GRID_Y
         );
 
         addLabel(root, ".input", INPUT_LABEL_X);
@@ -110,28 +101,28 @@ public class AutoCrafterGuiDescription extends SyncedGuiDescription {
     @NotNull
     private static WItemSlot createGrid(Inventory inventory, int startIndex) {
         return WItemSlot.of(
-                inventory,
-                startIndex,
-                CraftingView.Grid.WIDTH,
-                CraftingView.Grid.HEIGHT
+            inventory,
+            startIndex,
+            CraftingView.Grid.WIDTH,
+            CraftingView.Grid.HEIGHT
         );
     }
 
     protected static void addOutputSlot(WPlainPanel root, int outputX, Inventory inventory) {
         root.add(
-                WItemSlot.outputOf(inventory, AutoCrafterBlockEntity.Slots.OUTPUT_SLOT)
-                        .setInsertingAllowed(false),
-                outputX,
-                OUTPUT_Y
+            WItemSlot.outputOf(inventory, AutoCrafterBlockEntity.Slots.OUTPUT_SLOT)
+                .setInsertingAllowed(false),
+            outputX,
+            OUTPUT_Y
         );
     }
 
     protected static void addLabel(WPlainPanel root, String s, int inputLabelX) {
         root.add(
-                new WLabel(Text.translatable("label." + NAMESPACE + s))
-                        .setHorizontalAlignment(HorizontalAlignment.CENTER),
-                inputLabelX,
-                GRID_LABEL_Y
+            new WLabel(Text.translatable("label." + NAMESPACE + s))
+                .setHorizontalAlignment(HorizontalAlignment.CENTER),
+            inputLabelX,
+            GRID_LABEL_Y
         );
     }
 

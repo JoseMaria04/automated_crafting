@@ -19,6 +19,7 @@ import net.minecraft.recipe.CraftingRecipe;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeHolder;
 import net.minecraft.recipe.RecipeType;
+import net.minecraft.registry.HolderLookup;
 import net.minecraft.screen.NamedScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerContext;
@@ -49,7 +50,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public static final MutableText NAME = Text.translatable("block.automated_crafting.auto_crafter");
 
     public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
-        return templateStack.isOf(inputStack.getItem()) && ItemStack.canCombine(templateStack, inputStack);
+        return templateStack.isOf(inputStack.getItem()) && ItemStack.itemsAndComponentsMatch(templateStack, inputStack);
     }
 
     public static Storage<ItemVariant> getStorage(AutoCrafterBlockEntity blockEntity, Direction direction) {
@@ -141,31 +142,22 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     // Serialize the BlockEntity
     @Override
-    public void writeNbt(NbtCompound nbt) {
-        super.writeNbt(nbt);
-        DefaultedList<ItemStack> invStackList = getInvStackList();
-        Inventories.writeNbt(nbt, invStackList);
+    public void writeNbt(NbtCompound nbt, HolderLookup.Provider lookupProvider) {
+        super.writeNbt(nbt, lookupProvider);
+        DefaultedList<ItemStack> invStackList = method_11282();
+        Inventories.writeNbt(nbt, invStackList, lookupProvider);
     }
 
     // Deserialize the BlockEntity
     @Override
-    public void readNbt(NbtCompound nbt) {
-        super.readNbt(nbt);
+    public void method_11014(NbtCompound nbt, HolderLookup.Provider lookupProvider) {
+        super.method_11014(nbt, lookupProvider);
         DefaultedList<ItemStack> invStackList = DefaultedList.ofSize(Slots.INVENTORY_SIZE, ItemStack.EMPTY);
-        Inventories.readNbt(nbt, invStackList);
-        setInvStackList(invStackList);
+        Inventories.readNbt(nbt, invStackList, lookupProvider);
+        method_11281(invStackList);
     }
 
-    @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     public void tryCraft() {
-//        try {
-//            if (Transaction.getCurrentUnsafe() != null) return;
-//            // if null, vanilla transfer and you can just update the stacks directly
-//            // if not null, transfer api transfer. Do nothing
-//        } catch (IllegalStateException ex) {
-//            // means that this is the final markDirty, OK to update contents
-//        }
-
         Optional<CraftingRecipe> optRecipe = getRecipe();
         if(optRecipe.isPresent()) {
             CraftingRecipe recipe = optRecipe.get();
@@ -190,8 +182,6 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
                     this.output.get().increment(output1.getCount());
             } else tryPlayFailSound();
         } else tryPlayFailSound();
-
-
     }
 
     protected void tryPlayFailSound() {
@@ -201,11 +191,13 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected OutputAction checkOutput(ItemStack output) {
         if (this.output.isEmpty()) return OutputAction.SET;
-        else if (ItemStack.canCombine(output, this.output.get()) && this.output.getMaxCount() >= this.output.getCount() + output.getCount())
-            //outputs are same item and output can fit in stack
+        else if (
+            ItemStack.itemsAndComponentsMatch(output, this.output.get()) &&
+            this.output.getMaxCount() >= this.output.getCount() + output.getCount()
+        ) {
+            // outputs can combine and output can fit in stack
             return OutputAction.INCREMENT;
-
-        return OutputAction.FAIL;
+        } else return OutputAction.FAIL;
     }
 
     protected Optional<CraftingRecipe> getRecipe() {
@@ -253,9 +245,6 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
         // this is meant ot be called after isValid, so slot should be empty and match template (if simple)
         int inputSlot = Slots.toInputSlot(slot);
         return CraftingView.Grid.contains(inputSlot);
-//        && this.inputInventory.getStack(inputSlot).isEmpty();
-//                && this.inputInventory.isValid(inputSlot, stack);
-                // && matchesTemplate(inputSlot, stack);
     }
 
     @Override
@@ -276,7 +265,6 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
                 templateInventory.removeStack(slot, amount);
         }
 
-//        tryCraftContinuously();
         return removedStack;
     }
 
@@ -287,10 +275,9 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
             removedStack = output.get();
             output.set(ItemStack.EMPTY);
         } else {
-            if (slot >= Slots.INPUT_START)
-                removedStack = inputInventory.removeStack(Slots.toInputSlot(slot));
-            else
-                removedStack = templateInventory.removeStack(slot);
+            removedStack = slot >= Slots.INPUT_START ?
+                inputInventory.removeStack(Slots.toInputSlot(slot)) :
+                templateInventory.removeStack(slot);
         }
 
         tryCraftContinuously();
@@ -308,17 +295,16 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
         // So we have to directly set the slot's contents
         if (slot == Slots.OUTPUT_SLOT) output.set(stack);
         else {
-            if (slot >= Slots.INPUT_START)
-                inputInventory.setStack(Slots.toInputSlot(slot), stack);
-            else
-                templateInventory.setStack(slot, stack);
+            if (slot >= Slots.INPUT_START) inputInventory.setStack(Slots.toInputSlot(slot), stack);
+            else templateInventory.setStack(slot, stack);
         }
 
         markDirty();
     }
 
+    // getInvStackList
     @Override
-    protected DefaultedList<ItemStack> getInvStackList() {
+    protected DefaultedList<ItemStack> method_11282() {
         final DefaultedList<ItemStack> stacks = DefaultedList.of();
         stacks.addAll(templateInventory.getStacks());
         stacks.addAll(inputInventory.getStacks());
@@ -326,8 +312,9 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
         return stacks;
     }
 
+    // setInvStackList
     @Override
-    protected void setInvStackList(DefaultedList<ItemStack> list) {
+    protected void method_11281(DefaultedList<ItemStack> list) {
         final int size = list.size();
         int i;
         for (i = 0; i < Slots.INPUT_START; i++)

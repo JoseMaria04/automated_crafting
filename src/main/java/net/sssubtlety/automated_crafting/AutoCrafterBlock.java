@@ -12,7 +12,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.ItemScatterer;
 import net.minecraft.util.hit.BlockHitResult;
@@ -24,7 +23,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
     public static final Identifier ID = new Identifier("automated_crafting", "auto_crafter");
     public static final BooleanProperty POWERED = BooleanProperty.of("powered");
     public static final BooleanProperty ACTIVATED = BooleanProperty.of("activated");
-    private static final MapCodec<AutoCrafterBlock> mapCodec = method_54094(AutoCrafterBlock::new);
+    private static final MapCodec<AutoCrafterBlock> CODEC = createCodec(AutoCrafterBlock::new);
 
     protected static void logWrongBlockEntityError() {
         AutomatedCrafting.LOGGER.error("AutoCrafterBlock found block entity that was not an AutoCrafterBlockEntity.");
@@ -37,7 +36,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
 
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return mapCodec;
+        return CODEC;
     }
 
     protected boolean isPowered(World world, BlockPos pos) {
@@ -60,9 +59,8 @@ public class AutoCrafterBlock extends BlockWithEntity {
         return BlockRenderType.MODEL;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (world.isClient) {
             return ActionResult.SUCCESS;
         } else {
@@ -76,7 +74,6 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean moved) {
         boolean isPowered = isPowered(world, pos);
@@ -92,11 +89,9 @@ public class AutoCrafterBlock extends BlockWithEntity {
                     world.scheduleBlockTick(pos, this, 2);
 
             }
-        } else
-            world.setBlockState(pos, state.with(POWERED, false).with(ACTIVATED, false), 2);
+        } else world.setBlockState(pos, state.with(POWERED, false).with(ACTIVATED, false), 2);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
         if (!FeatureControl.doesCraftContinuously() && state.get(ACTIVATED))
@@ -105,7 +100,6 @@ public class AutoCrafterBlock extends BlockWithEntity {
         tryCraft(world, pos);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (state.getBlock() != newState.getBlock()) {
@@ -118,13 +112,11 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean hasComparatorOutput(BlockState state) {
         return true;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity)
@@ -135,7 +127,6 @@ public class AutoCrafterBlock extends BlockWithEntity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean isRedstonePowerSource(BlockState state) {
         return FeatureControl.doesRedirectRedstone();

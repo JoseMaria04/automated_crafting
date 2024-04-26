@@ -11,6 +11,8 @@ import net.minecraft.util.Formatting;
 
 import java.util.Optional;
 
+import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
+
 public final class Util {
     public static Text replace(Text text, String regex, String replacement) {
         String string = text.getString();
@@ -24,7 +26,7 @@ public final class Util {
             try {
                 return VersionPredicate.parse(versionPredicate).test(optModContainer.get().getMetadata().getVersion());
             } catch (VersionParsingException e) {
-                e.printStackTrace();
+                LOGGER.error("Failed to parse version predicate", e);
             }
         }
 

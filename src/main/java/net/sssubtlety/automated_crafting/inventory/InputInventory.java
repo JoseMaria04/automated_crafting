@@ -1,17 +1,14 @@
 package net.sssubtlety.automated_crafting.inventory;
 
-import net.fabricmc.fabric.api.transfer.v1.item.InventoryStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
 import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
-import net.sssubtlety.automated_crafting.Config;
 import net.sssubtlety.automated_crafting.FeatureControl;
 
 import static net.sssubtlety.automated_crafting.AutoCrafterBlockEntity.templatePredicate;
 
-@SuppressWarnings("UnstableApiUsage")
 public class InputInventory extends CraftingView {
     protected final Inventory templateInventory;
     public final Storage<ItemVariant> storage;

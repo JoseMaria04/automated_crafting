@@ -3,6 +3,7 @@ package net.sssubtlety.automated_crafting.inventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,7 +27,7 @@ public class DefaultedStackView extends DefaultedList<ItemStack> {
     }
 
     @Override
-    public DefaultedStackView subList(int fromIndex, int toIndex) {
+    public @NotNull DefaultedStackView subList(int fromIndex, int toIndex) {
         return new DefaultedStackView(super.subList(fromIndex, toIndex));
     }
 
