@@ -24,7 +24,7 @@
 
   "text.autoconfig.automated_crafting.option.redirect_redstone": "Enable Redstone Dust Redirection",
   "text.autoconfig.automated_crafting.option.redirect_redstone.@Tooltip":
-  "Redstone dust next to auto an crafter will point into the auto crafter",
+  "Redstone dust next to auto an auto crafter will point into the auto crafter",
 
   "text.autoconfig.automated_crafting.option.craft_continuously": "Craft Continuously While Powered",
   "text.autoconfig.automated_crafting.option.craft_continuously.@Tooltip":
