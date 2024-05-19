@@ -13,7 +13,7 @@
     "sources": "https://gitlab.com/${author}/${mod_id}"
   },
 
-  "license": "https://will-lucic.mit-license.org/",
+  "license": "MIT",
   "icon": "assets/${mod_id}/${mod_id}_icon.png",
 
   "environment": "*",
