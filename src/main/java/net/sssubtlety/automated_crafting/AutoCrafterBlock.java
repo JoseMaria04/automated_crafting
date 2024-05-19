@@ -94,7 +94,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
 
     @Override
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
-        if (!FeatureControl.doesCraftContinuously() && state.get(ACTIVATED))
+        if (!FeatureControl.shouldCraftContinuously() && state.get(ACTIVATED))
             world.setBlockState(pos, state.with(ACTIVATED, false), 2);
 
         tryCraft(world, pos);
@@ -129,7 +129,7 @@ public class AutoCrafterBlock extends BlockWithEntity {
 
     @Override
     public boolean isRedstonePowerSource(BlockState state) {
-        return FeatureControl.doesRedirectRedstone();
+        return FeatureControl.shouldRedirectRedstone();
     }
 
     @Override

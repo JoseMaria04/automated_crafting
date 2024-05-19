@@ -32,15 +32,15 @@ public class FeatureControl {
         return CONFIG_INSTANCE == null ? Defaults.quasi_connective : CONFIG_INSTANCE.quasi_connective;
     }
 
-    public static boolean doesCraftContinuously() {
+    public static boolean shouldCraftContinuously() {
         return CONFIG_INSTANCE == null ? Defaults.craft_continuously : CONFIG_INSTANCE.craft_continuously;
     }
 
-    public static boolean doesRedirectRedstone() {
+    public static boolean shouldRedirectRedstone() {
         return CONFIG_INSTANCE == null ? Defaults.redirect_redstone : CONFIG_INSTANCE.redirect_redstone;
     }
 
-    public static boolean doesComparatorReadOutput() {
+    public static boolean shouldComparatorReadOutput() {
         return CONFIG_INSTANCE == null ? Defaults.comparator_reads_output : CONFIG_INSTANCE.comparator_reads_output;
     }
 

@@ -8,7 +8,6 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.LootableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.CraftingInventory;
 import net.minecraft.inventory.Inventories;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SidedInventory;
@@ -16,7 +15,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.Recipe;
 import net.minecraft.recipe.RecipeHolder;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.registry.HolderLookup;
@@ -42,12 +40,12 @@ import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
   Not actually a sided inventory, but needs `getAvailableSlots`, `canInsert`, `canExtract`.
   These allow for separate internal inventories and configs.
 */
-@SuppressWarnings("UnstableApiUsage")
+// TODO: add datafixer!
 public class AutoCrafterBlockEntity extends LootableContainerBlockEntity implements SidedInventory, TrimmableInventory, NamedScreenHandlerFactory {
     public static final int MAX_STACK_SIZE = 1;
     public static final int[] AVAILABLE_INDICES;
     public static final Validator validator = new Validator();
-    public static final MutableText NAME = Text.translatable("block.automated_crafting.auto_crafter");
+    public static final Text NAME = Text.translatable("block.automated_crafting.auto_crafter");
 
     public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
         return templateStack.isOf(inputStack.getItem()) && ItemStack.itemsAndComponentsMatch(templateStack, inputStack);
@@ -160,32 +158,33 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     public void tryCraft() {
         Optional<CraftingRecipe> optRecipe = getRecipe();
         if(optRecipe.isPresent()) {
-            CraftingRecipe recipe = optRecipe.get();
-            ItemStack output1 = recipe.craft(templateInventory, this.world.getRegistryManager());
-            OutputAction outputAction = checkOutput(output1);
-            if(outputAction != OutputAction.FAIL) {
-                DefaultedList<ItemStack> remainingStacks = recipe.getRemainder(this.inputInventory);
+            final var recipe = optRecipe.get();
+            assert this.world != null;
+            final var output = recipe.craft(templateInventory, this.world.getRegistryManager());
+            final var outputAction = checkOutput(output);
+            if (outputAction != OutputAction.FAIL) {
+                final var remainingStacks = recipe.getRemainder(this.inputInventory);
                 ItemStack slotRemainder;
                 for (int i = 0; i < CraftingView.Grid.SIZE; i++) {
                     slotRemainder = remainingStacks.get(i);
                     if (slotRemainder.isEmpty())
-                        //decrement stack
+                        // decrement stack
                         this.inputInventory.removeStack(i, 1);
                     else
-                        //set remainder
+                        // set remainder
                         this.inputInventory.setStack(i, slotRemainder);
                 }
 
                 if (outputAction == OutputAction.SET)
-                    this.output.set(output1);
+                    this.output.set(output);
                 else //outputAction == OutputAction.INCREMENT
-                    this.output.get().increment(output1.getCount());
+                    this.output.get().increment(output.getCount());
             } else tryPlayFailSound();
         } else tryPlayFailSound();
     }
 
     protected void tryPlayFailSound() {
-        if (world != null && !FeatureControl.doesCraftContinuously())
+        if (world != null && !FeatureControl.shouldCraftContinuously())
             world.syncWorldEvent(1001, pos, 0);
     }
 
@@ -229,7 +228,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
 
     protected void tryCraftContinuously() {
         if (
-            FeatureControl.doesCraftContinuously() &&
+            FeatureControl.shouldCraftContinuously() &&
             world != null &&
             world.getBlockState(pos).get(AutoCrafterBlock.POWERED)
         ) tryCraft();
@@ -361,7 +360,7 @@ public class AutoCrafterBlockEntity extends LootableContainerBlockEntity impleme
     }
 
     public int getComparatorOutput() {
-        if (FeatureControl.doesComparatorReadOutput() && !output.isEmpty()) return 15;
+        if (FeatureControl.shouldComparatorReadOutput() && !output.isEmpty()) return 15;
         return inputInventory.getComparatorOutput();
     }
 
