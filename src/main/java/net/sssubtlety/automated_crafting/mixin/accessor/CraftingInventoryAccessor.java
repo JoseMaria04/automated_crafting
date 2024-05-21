@@ -1,4 +1,4 @@
-package net.sssubtlety.automated_crafting.mixin;
+package net.sssubtlety.automated_crafting.mixin.accessor;
 
 
 import net.minecraft.inventory.CraftingInventory;

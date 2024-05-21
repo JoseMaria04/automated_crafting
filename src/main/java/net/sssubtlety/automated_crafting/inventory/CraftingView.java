@@ -7,7 +7,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.util.collection.DefaultedList;
-import net.sssubtlety.automated_crafting.mixin.CraftingInventoryAccessor;
+import net.sssubtlety.automated_crafting.mixin.accessor.CraftingInventoryAccessor;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
