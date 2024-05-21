@@ -7,8 +7,8 @@
   "label.automated_crafting.template": "Template",
   "label.automated_crafting.input": "Input",
 
-  "modmenu.summaryTranslation.mod_id": "Craft automatically",
-  "modmenu.descriptionTranslation.mod_id": "Adds a simple autocrafter block. Has a simple mode and a... not simple mode.",
+  "modmenu.summaryTranslation.automated_crafting": "Craft automatically",
+  "modmenu.descriptionTranslation.automated_crafting": "Adds a simple autocrafter block. Has a simple mode and a... not simple mode.",
 
   "text.automated_crafting.no_config_screen.title": "${name} Configuration Unavailable",
   "text.automated_crafting.no_config_screen.message": "§cInstall Cloth Config to enable configuration.",

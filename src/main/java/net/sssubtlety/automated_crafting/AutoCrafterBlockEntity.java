@@ -40,7 +40,6 @@ import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
   Not actually a sided inventory, but needs `getAvailableSlots`, `canInsert`, `canExtract`.
   These allow for separate internal inventories and configs.
 */
-// TODO: add datafixer!
 public class AutoCrafterBlockEntity extends LootableContainerBlockEntity implements SidedInventory, TrimmableInventory, NamedScreenHandlerFactory {
     public static final int MAX_STACK_SIZE = 1;
     public static final int[] AVAILABLE_INDICES;
