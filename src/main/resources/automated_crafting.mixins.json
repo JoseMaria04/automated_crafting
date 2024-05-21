@@ -4,7 +4,8 @@
   "package": "net.sssubtlety.automated_crafting.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "CraftingInventoryAccessor"
+    "CraftingInventoryAccessor",
+    "Schema3807Mixin"
   ],
   "injectors": {
     "defaultRequire": 1

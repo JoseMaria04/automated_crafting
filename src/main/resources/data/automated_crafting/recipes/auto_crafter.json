@@ -20,6 +20,6 @@
     }
   },
   "result": {
-    "item": "automated_crafting:auto_crafter"
+    "id": "automated_crafting:auto_crafter"
   }
 }
