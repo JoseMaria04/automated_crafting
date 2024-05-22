@@ -1,3 +1,6 @@
+- 1.4.17 (21 May 2024):
+  - Updated for 1.20.6
+  - Minor internal changes
 - 1.4.16 (29 Jan. 2024):
   - Updated for 1.20.3 and 1.20.4
   - Minor internal changes
