@@ -25,7 +25,7 @@
 ](https://modrinth.com/mod/automated-crafting/versions)
 [
 ![CurseForge: Downloads](https://img.shields.io/curseforge/dt/389435?logo=curseforge&label=CurseForge&color=%23f16437)
-](https://www.curseforge.com/minecraft/mc-mods/automated-crafting)  
+](https://www.curseforge.com/minecraft/mc-mods/automated-crafting/files)  
 [![chat: Discord](https://img.shields.io/discord/1006391289006280746?logo=discord&color=5964f3)
 ](https://discord.gg/xABmPngXAH)
 <a href="https://coindrop.to/supersaiyansubtlety"><img width="77" style="border-radius:3px" src="https://coindrop.to/embed-button.png" alt="coindrop.to me"></a>
@@ -56,31 +56,31 @@ Basically, you insert items (with hoppers and droppers) so that a recipe pattern
 Supports [Cloth Config](https://modrinth.com/mod/cloth-config/versions) and
 [Mod Menu](https://modrinth.com/mod/modmenu/versions) for configuration, but neither is required.
 
-Options will use their default values if Cloth Config is absent.
+Options will use their default values if [Cloth Config](https://modrinth.com/mod/cloth-config/versions) is absent.
 
-If Cloth Config is present, options can be configured either through
+If [Cloth Config](https://modrinth.com/mod/cloth-config/versions) is present, options can be configured either through
 [Mod Menu](https://modrinth.com/mod/modmenu/versions) or by editing `config/automated_crafting.json` in your
 instance folder (`.minecraft/` by default for the vanilla launcher).
 
 - Enable Simple Mode
   Default: `true`
-  > In simple mode you can set a recipe template,
+  > In simple mode you can set a recipe template
 
 - Enable Quasi-Connectivity
   Default: `false`
-  > If the block above an auto crafter would be powered, the auto crafter is powered (but not updated),
+  > If the block above an auto crafter would be powered, the auto crafter is powered (but not updated)
 
 - Enable Redstone Dust Redirection
   Default: `false`
-  > Redstone dust next to auto an auto crafter will point into the auto crafter,
+  > Redstone dust next to auto an auto crafter will point into the auto crafter
 
 - Craft Continuously While Powered
   Default: `false`
-  > When an auto crafter is powered and contains a valid recipe, that recipe will be crafted immediately,
+  > When an auto crafter is powered and contains a valid recipe, that recipe will be crafted immediately
 
 - Comparator reads 15 if output isn't empty
   Default: `false`
-  > A comparator reading an auto crafter with anything in its output slot will read 15,
+  > A comparator reading an auto crafter with anything in its output slot will read 15
 
 - Download translation updates  
   Default: `true`
