@@ -4,7 +4,7 @@
 
 ## Automated Crafting
 
-[![Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_389435_all.svg)](https://modrinth.com/mod/automated-crafting/versions#all-versions)
+[![Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_automated-crafting_all.svg)](https://modrinth.com/mod/automated-crafting/versions#all-versions)
 ![environment: both](https://img.shields.io/badge/environment-both-4caf50)  
 [![loader: Fabric](https://img.shields.io/badge/loader-Fabric-%23cdc4ae?logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjYgMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDoyIj48cGF0aCBkPSJtMTAgMjQtOC04TDE0IDRWMmgybDYgNnY0TDEwIDI0eiIgc3R5bGU9ImZpbGw6I2RiZDBiNCIvPjxwYXRoIGQ9Ik0xMiA2djJoLTJ2Mkg4djJINnYySDR2MkgydjRoMnYyaDJ2MmgydjJoMnYtMmgydi0yaDJ2LTJoMnYtMmgydi0yaDJ2LTRoLTJ2LTJoLTJWOGgtMlY2aDJ2MmgydjJoMnYyaDJ2Mmgydi0yaC0yVjhoLTJWNmgtMlY0aC0yVjJoMnYyaDJ2MmgydjJoMnYyaDJ2NGgtMnYyaC00djJoLTJ2MmgtMnYyaC0ydjRoLTJ2Mkg4di0ySDZ2LTJINHYtMkgydi0ySDB2LTRoMnYtMmgydi0yaDJ2LTJoMlY4aDJWNmgyVjJoMlYwaDJ2MmgtMnY0aC0yIiBzdHlsZT0iZmlsbDojMzgzNDJhIi8+PHBhdGggc3R5bGU9ImZpbGw6IzgwN2E2ZCIgZD0iTTIyIDEyaDJ2MmgtMnoiLz48cGF0aCBkPSJNMiAxOGgydjJoMnYyaDJ2MmgydjJIOHYtMkg2di0ySDR2LTJIMnYtMiIgc3R5bGU9ImZpbGw6IzlhOTI3ZSIvPjxwYXRoIGQ9Ik0yIDE2aDJ2MmgydjJoMnYyaDJ2Mkg4di0ySDZ2LTJINHYtMkgydi0yeiIgc3R5bGU9ImZpbGw6I2FlYTY5NCIvPjxwYXRoIGQ9Ik0yMiAxMnYtMmgtMlY4aC0yVjZsLTIuMDIzLjAyM0wxNiA4aDJ2MmgydjJoMnpNMTAgMjR2LTJoMnYtNGg0di00aDJ2LTJoMnY0aC0ydjJoLTJ2MmgtMnYyaC0ydjJoLTIiIHN0eWxlPSJmaWxsOiNiY2IyOWMiLz48cGF0aCBkPSJNMTQgMThoLTR2LTJIOHYtMmgydjJoNHYyem00LTRoLTR2LTJoLTJ2LTJoLTJWOGgydjJoMnYyaDR2MnpNMTQgNGgydjJoLTJWNHoiIHN0eWxlPSJmaWxsOiNjNmJjYTUiLz48L3N2Zz4=)
 ](https://fabricmc.net/)
@@ -62,28 +62,22 @@ If [Cloth Config](https://modrinth.com/mod/cloth-config/versions) is present, op
 [Mod Menu](https://modrinth.com/mod/modmenu/versions) or by editing `config/automated_crafting.json` in your
 instance folder (`.minecraft/` by default for the vanilla launcher).
 
-- Enable Simple Mode
-  Default: `true`
+- Enable Simple Mode; default: `true`
   > In simple mode you can set a recipe template
 
-- Enable Quasi-Connectivity
-  Default: `false`
+- Enable Quasi-Connectivity; default: `false`
   > If the block above an auto crafter would be powered, the auto crafter is powered (but not updated)
 
-- Enable Redstone Dust Redirection
-  Default: `false`
+- Enable Redstone Dust Redirection; default: `false`
   > Redstone dust next to auto an auto crafter will point into the auto crafter
 
-- Craft Continuously While Powered
-  Default: `false`
+- Craft Continuously While Powered; default: `false`
   > When an auto crafter is powered and contains a valid recipe, that recipe will be crafted immediately
 
-- Comparator reads 15 if output isn't empty
-  Default: `false`
+- Comparator reads 15 if output isn't empty; default: `false`
   > A comparator reading an auto crafter with anything in its output slot will read 15
 
-- Download translation updates  
-  Default: `true`
+- Download translation updates; default: `true`
   > Download translations from Crowdin when the game launches
 
 </details>
