@@ -13,7 +13,8 @@
 [![supports: Mod Menu](https://img.shields.io/badge/supports-Mod_Menu-134bfe?logo=data:image/webp+xml;base64,UklGRlIAAABXRUJQVlA4TEUAAAAv/8F/AA9wpv9T/M///McDFLeNpKT/pg8WDv6jiej/BAz7v+bbAKDn9D9l4Es/T/9TBr708/Q/ZeBLP0//c7Xiqp7z/QEA)](https://modrinth.com/mod/modmenu/versions)  
 [![license: MIT](https://img.shields.io/badge/license-MIT-white)](https://gitlab.com/supersaiyansubtlety/automated_crafting/-/blob/master/LICENSE)
 [![source on: GitLab](https://img.shields.io/badge/source_on-GitLab-fc6e26?logo=gitlab)](https://gitlab.com/supersaiyansubtlety/automated_crafting)
-[![issues: GitLab](https://img.shields.io/gitlab/issues/open-raw/supersaiyansubtlety/automated_crafting?label=issues&logo=gitlab)](https://gitlab.com/supersaiyansubtlety/automated_crafting/-/issues)  
+[![issues: GitLab](https://img.shields.io/gitlab/issues/open-raw/supersaiyansubtlety/automated_crafting?label=issues&logo=gitlab)](https://gitlab.com/supersaiyansubtlety/automated_crafting/-/issues)
+[![localized: Percentage](https://badges.crowdin.net/automated-crafting/localized.svg)](https://crwd.in/automated-crafting)  
 [![Modrinth: Downloads](https://img.shields.io/modrinth/dt/automated-crafting?logo=modrinth&label=Modrinth&color=00ae5d)](https://modrinth.com/mod/automated-crafting/versions)
 [![CurseForge: Downloads](https://img.shields.io/curseforge/dt/389435?logo=curseforge&label=CurseForge&color=f16437)](https://www.curseforge.com/minecraft/mc-mods/automated-crafting/files)  
 [![chat: Discord](https://img.shields.io/discord/1006391289006280746?logo=discord&color=5964f3)](https://discord.gg/xABmPngXAH)
@@ -25,9 +26,11 @@
 
 ---
 
-Adds a single block: the Automated Crafting Table.
+### Adds a simple autocrafter block. Has a simple mode and a... not simple mode.
 
 Must be installed on both client and server.
+
+Adds a single block: the Automated Crafting Table.
 
 <img alt="Automated Crafting Table" width="142" src="https://gitlab.com/uploads/-/system/project/avatar/19136557/automated_crafting_icon+400x400.png">
 <img alt="Automated Crafting Table recipe" width="300" src="https://lh3.googleusercontent.com/yMvEWd7sOwhxDpsvlEQBXdFwX-fpwG_T3tlITGYNfR6CM2s3s55X9sudybASEHdABbx5g2D1TiUaM0Iv2BbMgYoD2WrjN3pY5LPYOZooKUfJ8nHv6KZQYHvBTeJxoRR9OmNuEPp1PZ14cGbeFe8HWWVKOfThhd3spf_Xr2qmjnD8kX8I0ig_x83IyRwQd6kg7adwtqyPWw7TPkmqZS6Mt5WMQTjVvPJJI1MB5ay5vx4oer-hR_W69_qAiGgpNrL9vCsM841SzFLz6hmWKhwpJHb56vM8T_4QOH2j1TdJUpQBl_Z0mocSdKp2OZbK0mmgKc_h6EY5mnkDD8VE3a_QaYWo_-BemUGUeUdcrjK0FtBX_VTkckVTN4InuOGd4HhkiyUSgbDjspuhoJJRP3HbOB0CPwXmgIVpTcPJRwBTYYWED0EaxEB_f68SyfXquifo-Xd51CDdFMMvaRKYY7atVm0YJWkdA61hxKcaeQSoJ2ecjGyJ6chtMaAbOOaPYI-OwYRRvjQ7ZNeIQCCEY6XJFGqjAAF3RI0KoUJvNZJtYIYkJmL6ZZk88Dr2SeH3w8-kmHUiT-ElGtSIVVPmfWDdVijYZ-0IJOvS6aB2msOUa2qgTzTMgdscwpa4ez97gF9ryosw_bcqQML0ejzaJhRa2Ep-LC_e7gLnxk3KL4ztlUR9An7E8lq4-2yOlBu6gM4qTOB9=w800-h500-k-ft">
@@ -77,6 +80,7 @@ instance folder (`.minecraft/` by default for the vanilla launcher).
 
 <summary>Translating</summary>
 
+[![localized: Percentage](https://badges.crowdin.net/automated-crafting/localized.svg)](https://crwd.in/automated-crafting)  
 If you'd like to help translate Automated Crafting, you can do so on
 [Crowdin](https://crwd.in/automated-crafting).  
 New translations will be added once approved without the mod needing an update thanks to
