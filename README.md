@@ -4,7 +4,6 @@
 
 ## Automated Crafting
 
-[![Minecraft versions](https://cf.way2muchnoise.eu/versions/Minecraft_automated-crafting_all.svg)](https://modrinth.com/mod/automated-crafting/versions#all-versions)
 ![environment: both](https://img.shields.io/badge/environment-both-4caf50)  
 [![loader: Fabric](https://img.shields.io/badge/loader-Fabric-cdc4ae?logo=data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjYgMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgc3R5bGU9ImZpbGwtcnVsZTpldmVub2RkO2NsaXAtcnVsZTpldmVub2RkO3N0cm9rZS1saW5lam9pbjpyb3VuZDtzdHJva2UtbWl0ZXJsaW1pdDoyIj48cGF0aCBkPSJtMTAgMjQtOC04TDE0IDRWMmgybDYgNnY0TDEwIDI0eiIgc3R5bGU9ImZpbGw6I2RiZDBiNCIvPjxwYXRoIGQ9Ik0xMiA2djJoLTJ2Mkg4djJINnYySDR2MkgydjRoMnYyaDJ2MmgydjJoMnYtMmgydi0yaDJ2LTJoMnYtMmgydi0yaDJ2LTRoLTJ2LTJoLTJWOGgtMlY2aDJ2MmgydjJoMnYyaDJ2Mmgydi0yaC0yVjhoLTJWNmgtMlY0aC0yVjJoMnYyaDJ2MmgydjJoMnYyaDJ2NGgtMnYyaC00djJoLTJ2MmgtMnYyaC0ydjRoLTJ2Mkg4di0ySDZ2LTJINHYtMkgydi0ySDB2LTRoMnYtMmgydi0yaDJ2LTJoMlY4aDJWNmgyVjJoMlYwaDJ2MmgtMnY0aC0yIiBzdHlsZT0iZmlsbDojMzgzNDJhIi8+PHBhdGggc3R5bGU9ImZpbGw6IzgwN2E2ZCIgZD0iTTIyIDEyaDJ2MmgtMnoiLz48cGF0aCBkPSJNMiAxOGgydjJoMnYyaDJ2MmgydjJIOHYtMkg2di0ySDR2LTJIMnYtMiIgc3R5bGU9ImZpbGw6IzlhOTI3ZSIvPjxwYXRoIGQ9Ik0yIDE2aDJ2MmgydjJoMnYyaDJ2Mkg4di0ySDZ2LTJINHYtMkgydi0yeiIgc3R5bGU9ImZpbGw6I2FlYTY5NCIvPjxwYXRoIGQ9Ik0yMiAxMnYtMmgtMlY4aC0yVjZsLTIuMDIzLjAyM0wxNiA4aDJ2MmgydjJoMnpNMTAgMjR2LTJoMnYtNGg0di00aDJ2LTJoMnY0aC0ydjJoLTJ2MmgtMnYyaC0ydjJoLTIiIHN0eWxlPSJmaWxsOiNiY2IyOWMiLz48cGF0aCBkPSJNMTQgMThoLTR2LTJIOHYtMmgydjJoNHYyem00LTRoLTR2LTJoLTJ2LTJoLTJWOGgydjJoMnYyaDR2MnpNMTQgNGgydjJoLTJWNHoiIHN0eWxlPSJmaWxsOiNjNmJjYTUiLz48L3N2Zz4=)](https://fabricmc.net/)
 <a href="https://quiltmc.org/"><img width=75 src="https://raw.githubusercontent.com/QuiltMC/art/master/brand/1024png/quilt_available_dark.png" alt="available for: Quilt Loader"></a>  
@@ -31,6 +30,27 @@
 Must be installed on both client and server.
 
 Adds a single block: the Automated Crafting Table.
+
+---
+
+### Automated Crafting is discontinued on Minecraft 1.21+ because of the vanilla Crafter
+
+There's a [converter](https://modrinth.com/mod/automated-crafting/version/1.0.0+MC1.21)
+that can be used to turn Automated Crafting Tables into Crafters when updating a world to 1.21.
+
+<details>
+
+<summary>Converter details</summary>
+
+Use the converter when updating a pre-1.21 world with Automated Crafting Tables to 1.21.  
+Contraptions that used the Automated Crafting Table are unlikely to work with the Crafter, but this will at least
+minimize the loss of blocks and items.  
+Automated Crafting Tables' input will be copied to its Crafter replacement, but its output will be lost because
+Crafters' output slots don't hold items.
+
+</details>
+
+---
 
 <img alt="Automated Crafting Table" width="142" src="https://gitlab.com/uploads/-/system/project/avatar/19136557/automated_crafting_icon+400x400.png">
 <img alt="Automated Crafting Table recipe" width="300" src="https://lh3.googleusercontent.com/yMvEWd7sOwhxDpsvlEQBXdFwX-fpwG_T3tlITGYNfR6CM2s3s55X9sudybASEHdABbx5g2D1TiUaM0Iv2BbMgYoD2WrjN3pY5LPYOZooKUfJ8nHv6KZQYHvBTeJxoRR9OmNuEPp1PZ14cGbeFe8HWWVKOfThhd3spf_Xr2qmjnD8kX8I0ig_x83IyRwQd6kg7adwtqyPWw7TPkmqZS6Mt5WMQTjVvPJJI1MB5ay5vx4oer-hR_W69_qAiGgpNrL9vCsM841SzFLz6hmWKhwpJHb56vM8T_4QOH2j1TdJUpQBl_Z0mocSdKp2OZbK0mmgKc_h6EY5mnkDD8VE3a_QaYWo_-BemUGUeUdcrjK0FtBX_VTkckVTN4InuOGd4HhkiyUSgbDjspuhoJJRP3HbOB0CPwXmgIVpTcPJRwBTYYWED0EaxEB_f68SyfXquifo-Xd51CDdFMMvaRKYY7atVm0YJWkdA61hxKcaeQSoJ2ecjGyJ6chtMaAbOOaPYI-OwYRRvjQ7ZNeIQCCEY6XJFGqjAAF3RI0KoUJvNZJtYIYkJmL6ZZk88Dr2SeH3w8-kmHUiT-ElGtSIVVPmfWDdVijYZ-0IJOvS6aB2msOUa2qgTzTMgdscwpa4ez97gF9ryosw_bcqQML0ejzaJhRa2Ep-LC_e7gLnxk3KL4ztlUR9An7E8lq4-2yOlBu6gM4qTOB9=w800-h500-k-ft">
