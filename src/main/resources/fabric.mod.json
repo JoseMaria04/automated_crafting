@@ -1,53 +1,41 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
-  "version": "${mod_version}",
+  "id": "automated_crafting",
+  "version": "${version}",
 
-  "name": "${mod_name}",
-  "description": "${mod_description}",
+  "name": "Automated Crafting",
+  "description": "Adds a simple autocrafter block. Has a simple mode and a... not simple mode.\nUnofficial 26.3 port by JoseMaria04 of the original mod by supersaiyansubtlety.",
   "authors": [
-    "${author}"
+    "supersaiyansubtlety"
+  ],
+  "contributors": [
+    "JoseMaria04 (26.3 port)"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/${archives_base_name}",
-    "sources": "https://gitlab.com/${author}/${mod_id}",
-    "issues": "https://gitlab.com/${author}/${mod_id}/-/issues"
-  },
-
-  "custom": {
-    "modmenu": {
-      "links": {
-        "modmenu.discord": "https://discord.gg/xABmPngXAH"
-      }
-    }
+    "homepage": "https://modrinth.com/mod/automated-crafting",
+    "sources": "https://github.com/JoseMaria04/automated_crafting",
+    "issues": "https://github.com/JoseMaria04/automated_crafting/issues"
   },
 
   "license": "MIT",
-  "icon": "assets/${mod_id}/icon.png",
+  "icon": "assets/automated_crafting/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "${maven_group}.${mod_id}.Init"
+      "net.sssubtlety.automated_crafting.Init"
     ],
     "client": [
-      "${maven_group}.${mod_id}.ClientInit"
-    ],
-    "modmenu": [
-      "${maven_group}.${mod_id}.gui.ModMenuIntegration"
+      "net.sssubtlety.automated_crafting.ClientInit"
     ]
   },
   "mixins": [
-    "${mod_id}.mixins.json"
+    "automated_crafting.mixins.json"
   ],
 
   "depends": {
-    "fabricloader": ">=${min_fabricloader_version}",
-    "fabric": ">=${min_fabric_version}",
-    "minecraft": ">=${min_minecraft_version} <=${minecraft_version}"
-  },
-  "suggests": {
-    "cloth-config2": ">=${min_cloth_config_version}",
-    "modmenu": ">=${min_modmenu_version}"
+    "fabricloader": ">=0.19.0",
+    "fabric-api": "*",
+    "minecraft": "~26.3"
   }
 }

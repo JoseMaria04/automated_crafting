@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "-": "minecraft:iron_trapdoor",
+    ">": "minecraft:comparator",
+    "=": "minecraft:smooth_stone_slab",
+    "#": "#automated_crafting:stripped_logs"
+  },
+  "pattern": [
+    "#-#",
+    "#>#",
+    "#=#"
+  ],
+  "result": {
+    "id": "automated_crafting:auto_crafter"
+  }
+}

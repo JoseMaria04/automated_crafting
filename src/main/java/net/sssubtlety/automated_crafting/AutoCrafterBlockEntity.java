@@ -1,397 +1,306 @@
 package net.sssubtlety.automated_crafting;
 
-import com.google.common.collect.Streams;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemVariant;
-import net.fabricmc.fabric.api.transfer.v1.storage.Storage;
-import net.fabricmc.fabric.api.transfer.v1.storage.base.CombinedStorage;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.LootableContainerBlockEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.Inventories;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.inventory.SidedInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.recipe.CraftingRecipe;
-import net.minecraft.recipe.RecipeHolder;
-import net.minecraft.recipe.RecipeType;
-import net.minecraft.registry.HolderLookup;
-import net.minecraft.screen.NamedScreenHandlerFactory;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.collection.DefaultedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
-import net.sssubtlety.automated_crafting.inventory.*;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.NonNullList;
+import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.Container;
+import net.minecraft.world.ContainerHelper;
+import net.minecraft.world.Containers;
+import net.minecraft.world.WorldlyContainer;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.level.block.entity.BaseContainerBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
+import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
 
-import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
+/**
+ * Inventory layout (unchanged from previous versions so saved auto crafters load correctly):
+ * slots 0-8 are the template (ghost items), 9-17 the input grid and 18 the output.
+ */
+public class AutoCrafterBlockEntity extends BaseContainerBlockEntity implements WorldlyContainer, ExtendedMenuProvider<Boolean> {
+	public static final int GRID_WIDTH = 3;
+	public static final int GRID_HEIGHT = 3;
+	public static final int GRID_SIZE = GRID_WIDTH * GRID_HEIGHT;
+	public static final int TEMPLATE_START = 0;
+	public static final int INPUT_START = GRID_SIZE;
+	public static final int OUTPUT_SLOT = GRID_SIZE * 2;
+	public static final int INVENTORY_SIZE = OUTPUT_SLOT + 1;
+	public static final int MAX_INPUT_STACK_SIZE = 1;
 
-/*
-  Not actually a sided inventory, but needs `getAvailableSlots`, `canInsert`, `canExtract`.
-  These allow for separate internal inventories and configs.
-*/
-public class AutoCrafterBlockEntity extends LootableContainerBlockEntity implements SidedInventory, TrimmableInventory, NamedScreenHandlerFactory {
-    public static final int MAX_STACK_SIZE = 1;
-    public static final int[] AVAILABLE_INDICES;
-    public static final Validator validator = new Validator();
-    public static final Text NAME = Text.translatable("block.automated_crafting.auto_crafter");
+	public static final Validator validator = new Validator();
+	public static final Component NAME = Component.translatable("block.automated_crafting.auto_crafter");
 
-    public static boolean templatePredicate(ItemStack inputStack, ItemStack templateStack) {
-        return templateStack.isOf(inputStack.getItem()) && ItemStack.itemsAndComponentsMatch(templateStack, inputStack);
-    }
+	// output first, then the input grid
+	private static final int[] AVAILABLE_SLOTS;
 
-    public static Storage<ItemVariant> getStorage(AutoCrafterBlockEntity blockEntity, Direction direction) {
-        if (direction == Direction.DOWN) return blockEntity.inputAndOutputStorage;
-        else return blockEntity.inputInventory.storage;
-    }
+	static {
+		AVAILABLE_SLOTS = new int[GRID_SIZE + 1];
+		AVAILABLE_SLOTS[0] = OUTPUT_SLOT;
+		for (int i = 0; i < GRID_SIZE; i++) AVAILABLE_SLOTS[i + 1] = INPUT_START + i;
+	}
 
-    static {
-        // An array of indices of slots that can be interacted with using automation,
-        //   in the order they should be interacted with
-        AVAILABLE_INDICES = new int[Slots.INPUT_PLUS_OUTPUT_SIZE];
-        // pull from output first
-        AVAILABLE_INDICES[0] = Slots.OUTPUT_SLOT;
-        for (int i = 1; i < Slots.INPUT_PLUS_OUTPUT_SIZE; i++) {
-            // PRE_FIRST_INPUT_SLOT because we're starting at i = 1
-            AVAILABLE_INDICES[i] = i + Slots.LAST_TEMPLATE_SLOT;
-        }
-    }
+	public static boolean templateMatches(ItemStack inputStack, ItemStack templateStack) {
+		return ItemStack.isSameItemSameComponents(templateStack, inputStack);
+	}
 
+	public static boolean isInput(int slot) {
+		return slot >= INPUT_START && slot < OUTPUT_SLOT;
+	}
 
-//    protected final DefaultedStackView combinedStacks;
-    protected final TemplateInventory templateInventory;
-    protected final InputInventory inputInventory;
-    protected final SingleOutputInventory output;
+	public static boolean isTemplate(int slot) {
+		return slot >= TEMPLATE_START && slot < INPUT_START;
+	}
 
-    protected final CombinedStorage<ItemVariant, Storage<ItemVariant>> inputAndOutputStorage;
-//    protected final CombinedStorage<ItemVariant, Storage<ItemVariant>> combinedStorage;
+	private NonNullList<ItemStack> items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
+	private final Validator.Validation validation = validator.getValidation();
+	private @Nullable RecipeHolder<CraftingRecipe> recipeCache;
 
+	public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
+		super(Registrar.BLOCK_ENTITY_TYPE, pos, state);
+	}
 
-    protected final Validator.Validation validation;
-    protected CraftingRecipe recipeCache;
+	// --- persistence ---
 
-    public AutoCrafterBlockEntity(BlockPos pos, BlockState state) {
-        super(Registrar.BLOCK_ENTITY_TYPE, pos, state);
+	@Override
+	protected void loadAdditional(ValueInput input) {
+		super.loadAdditional(input);
+		this.items = NonNullList.withSize(INVENTORY_SIZE, ItemStack.EMPTY);
+		ContainerHelper.loadAllItems(input, this.items);
+		this.recipeCache = null;
+	}
 
-//        this.combinedStacks = new DefaultedStackView(Slots.INVENTORY_SIZE);
-        this.templateInventory = new TemplateInventory(new DefaultedStackView(CraftingView.Grid.SIZE));//this.combinedStacks.subList(Slots.TEMPLATE_START, Slots.INPUT_START));
-        this.inputInventory = new InputInventory(new DefaultedStackView(CraftingView.Grid.SIZE), templateInventory, this::tryCraftContinuously);//this.combinedStacks.subList(Slots.INPUT_START, Slots.OUTPUT_SLOT), this.templateInventory);
-        this.output = new SingleOutputInventory(this::tryCraftContinuously);
+	@Override
+	protected void saveAdditional(ValueOutput output) {
+		super.saveAdditional(output);
+		ContainerHelper.saveAllItems(output, this.items);
+	}
 
-        this.inputAndOutputStorage = new CombinedStorage<>(List.of(output.storage, inputInventory.storage));
-//        combinedStorage = new CombinedStorage<>(List.of(
-//            InventoryStorage.of(templateInventory, null),
-//            InventoryStorage.of(inputInventory, null),
-//            InventoryStorage.of(output, null)
-//        ));
+	@Override
+	protected NonNullList<ItemStack> getItems() {
+		return items;
+	}
 
-        this.recipeCache = null;
-        this.validation = validator.getValidation();
-    }
+	@Override
+	protected void setItems(NonNullList<ItemStack> items) {
+		this.items = items;
+	}
 
-    protected boolean misMatchesTemplate(int slot, ItemStack inputStack) {
-        ItemStack templateStack = this.templateInventory.getStack(slot);
-        return !templatePredicate(inputStack, templateStack);
-    }
+	// --- crafting ---
 
-    @Override
-    public int getMaxCountPerStack() {
-        return MAX_STACK_SIZE;
-    }
+	private CraftingInput.Positioned positionedInput() {
+		return CraftingInput.ofPositioned(GRID_WIDTH, GRID_HEIGHT, items.subList(INPUT_START, OUTPUT_SLOT));
+	}
 
-    @Override
-    public boolean canPlayerUse(PlayerEntity player) {
-        return true;
-    }
+	public void tryCraft() {
+		if (!(level instanceof ServerLevel serverLevel)) return;
 
-    @Override
-    public boolean isValid(int slot, ItemStack stack) {
-        if (slot > Slots.OUTPUT_SLOT) return false;
-        else if (slot == Slots.OUTPUT_SLOT) return true;
-        else if (slot >= Slots.INPUT_START) return inputInventory.isValid(Slots.toInputSlot(slot), stack);
-        else return templateInventory.isValid(slot, stack);
-    }
+		final CraftingInput.Positioned positioned = positionedInput();
+		final CraftingInput input = positioned.input();
+		final Optional<RecipeHolder<CraftingRecipe>> optRecipe = getRecipe(serverLevel, input);
+		if (optRecipe.isEmpty()) {
+			tryPlayFailSound();
+			return;
+		}
 
-    @Override
-    public int count(Item item) {
-        int count = templateInventory.count(item);
-        count += inputInventory.count(item);
-        if (output.getItem() == item) count += output.getCount();
-        return count;
-    }
+		final CraftingRecipe recipe = optRecipe.get().value();
+		final ItemStack result = recipe.assemble(input);
+		final OutputAction outputAction = checkOutput(result);
+		if (result.isEmpty() || outputAction == OutputAction.FAIL) {
+			tryPlayFailSound();
+			return;
+		}
 
-    @Override
-    public boolean containsAny(Set<Item> items) {
-        return  items.contains(output.getItem()) ||
-                templateInventory.containsAny(items) ||
-                inputInventory.containsAny(items);
-    }
+		final NonNullList<ItemStack> remainders = recipe.getRemainingItems(input);
+		for (int y = 0; y < input.height(); y++) {
+			for (int x = 0; x < input.width(); x++) {
+				final int slot = INPUT_START + x + positioned.left() + (y + positioned.top()) * GRID_WIDTH;
+				final ItemStack remainder = remainders.get(x + y * input.width());
+				final ItemStack stack = items.get(slot);
+				if (!stack.isEmpty()) stack.shrink(1);
+				if (!remainder.isEmpty()) items.set(slot, remainder);
+				else if (stack.isEmpty()) items.set(slot, ItemStack.EMPTY);
+			}
+		}
 
-    // Serialize the BlockEntity
-    @Override
-    public void writeNbt(NbtCompound nbt, HolderLookup.Provider lookupProvider) {
-        super.writeNbt(nbt, lookupProvider);
-        DefaultedList<ItemStack> invStackList = method_11282();
-        Inventories.writeNbt(nbt, invStackList, lookupProvider);
-    }
+		result.onCraftedBySystem(serverLevel);
+		if (outputAction == OutputAction.SET) items.set(OUTPUT_SLOT, result);
+		else items.get(OUTPUT_SLOT).grow(result.getCount());
 
-    // Deserialize the BlockEntity
-    @Override
-    public void method_11014(NbtCompound nbt, HolderLookup.Provider lookupProvider) {
-        super.method_11014(nbt, lookupProvider);
-        DefaultedList<ItemStack> invStackList = DefaultedList.ofSize(Slots.INVENTORY_SIZE, ItemStack.EMPTY);
-        Inventories.readNbt(nbt, invStackList, lookupProvider);
-        method_11281(invStackList);
-    }
+		setChanged();
+	}
 
-    public void tryCraft() {
-        Optional<CraftingRecipe> optRecipe = getRecipe();
-        if(optRecipe.isPresent()) {
-            final var recipe = optRecipe.get();
-            assert this.world != null;
-            final var output = recipe.craft(templateInventory, this.world.getRegistryManager());
-            final var outputAction = checkOutput(output);
-            if (outputAction != OutputAction.FAIL) {
-                final var remainingStacks = recipe.getRemainder(this.inputInventory);
-                ItemStack slotRemainder;
-                for (int i = 0; i < CraftingView.Grid.SIZE; i++) {
-                    slotRemainder = remainingStacks.get(i);
-                    if (slotRemainder.isEmpty())
-                        // decrement stack
-                        this.inputInventory.removeStack(i, 1);
-                    else
-                        // set remainder
-                        this.inputInventory.setStack(i, slotRemainder);
-                }
+	private Optional<RecipeHolder<CraftingRecipe>> getRecipe(ServerLevel level, CraftingInput input) {
+		if (FeatureControl.isSimpleMode() && inputMismatchesTemplate()) return Optional.empty();
+		if (input.isEmpty()) return Optional.empty();
 
-                if (outputAction == OutputAction.SET)
-                    this.output.set(output);
-                else //outputAction == OutputAction.INCREMENT
-                    this.output.get().increment(output.getCount());
-            } else tryPlayFailSound();
-        } else tryPlayFailSound();
-    }
+		if (recipeCache == null || validation.invalid() || !recipeCache.value().matches(input, level)) {
+			recipeCache = level.recipeAccess().getRecipeFor(RecipeType.CRAFTING, input, level).orElse(null);
+		}
 
-    protected void tryPlayFailSound() {
-        if (world != null && !FeatureControl.shouldCraftContinuously())
-            world.syncWorldEvent(1001, pos, 0);
-    }
+		return Optional.ofNullable(recipeCache);
+	}
 
-    protected OutputAction checkOutput(ItemStack output) {
-        if (this.output.isEmpty()) return OutputAction.SET;
-        else if (
-            ItemStack.itemsAndComponentsMatch(output, this.output.get()) &&
-            this.output.getMaxCount() >= this.output.getCount() + output.getCount()
-        ) {
-            // outputs can combine and output can fit in stack
-            return OutputAction.INCREMENT;
-        } else return OutputAction.FAIL;
-    }
+	private boolean inputMismatchesTemplate() {
+		for (int i = 0; i < GRID_SIZE; i++) {
+			if (!templateMatches(items.get(INPUT_START + i), items.get(TEMPLATE_START + i))) return true;
+		}
 
-    protected Optional<CraftingRecipe> getRecipe() {
-        if (world == null) {
-            LOGGER.error("Trying to get recipe before world is initialized!");
-            return Optional.empty();
-        }
+		return false;
+	}
 
-        if (FeatureControl.isSimpleMode() && inputMisMatchesTemplate()) return Optional.empty();
+	private OutputAction checkOutput(ItemStack result) {
+		final ItemStack output = items.get(OUTPUT_SLOT);
+		if (output.isEmpty()) return OutputAction.SET;
+		else if (
+			ItemStack.isSameItemSameComponents(result, output) &&
+			output.getMaxStackSize() >= output.getCount() + result.getCount()
+		) return OutputAction.INCREMENT;
+		else return OutputAction.FAIL;
+	}
 
-        if(
-            recipeCache == null ||
-            validation.invalid() ||
-            !recipeCache.matches(inputInventory, world)
-        ) {
-            recipeCache = this.world.getRecipeManager().getFirstMatch(RecipeType.CRAFTING, inputInventory, this.world)
-                .map(RecipeHolder::value).orElse(null);
-        }
+	private void tryPlayFailSound() {
+		if (level != null && !FeatureControl.shouldCraftContinuously()) level.levelEvent(1001, worldPosition, 0);
+	}
 
-        return Optional.ofNullable(recipeCache);
-    }
+	private void tryCraftContinuously() {
+		if (
+			FeatureControl.shouldCraftContinuously() &&
+			level != null && !level.isClientSide() &&
+			getBlockState().getValue(AutoCrafterBlock.POWERED)
+		) tryCraft();
+	}
 
-    private boolean inputMisMatchesTemplate() {
-        for (int slot = 0; slot < CraftingView.Grid.SIZE; slot++)
-            if (misMatchesTemplate(slot, inputInventory.getStack(slot))) return true;
+	public int getComparatorOutput() {
+		if (FeatureControl.shouldComparatorReadOutput() && !items.get(OUTPUT_SLOT).isEmpty()) return 15;
+		int occupied = 0;
+		for (int i = INPUT_START; i < OUTPUT_SLOT; i++) if (!items.get(i).isEmpty()) occupied++;
+		return occupied;
+	}
 
-        return false;
-    }
+	/** Drops inputs and output, but not the template, which only holds ghost items. */
+	@Override
+	public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+		if (level == null) return;
+		for (int i = INPUT_START; i < INVENTORY_SIZE; i++) {
+			Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), items.get(i));
+		}
+	}
 
-    protected void tryCraftContinuously() {
-        if (
-            FeatureControl.shouldCraftContinuously() &&
-            world != null &&
-            world.getBlockState(pos).get(AutoCrafterBlock.POWERED)
-        ) tryCraft();
-    }
+	// --- container ---
 
-    @Override
-    public int[] getAvailableSlots(Direction side) {
-        return AVAILABLE_INDICES;
-    }
+	@Override
+	public int getContainerSize() {
+		return INVENTORY_SIZE;
+	}
 
-    @Override
-    public boolean canInsert(int slot, ItemStack stack, Direction dir) {
-        // this is meant ot be called after isValid, so slot should be empty and match template (if simple)
-        int inputSlot = Slots.toInputSlot(slot);
-        return CraftingView.Grid.contains(inputSlot);
-    }
+	@Override
+	public int getMaxStackSize() {
+		return MAX_INPUT_STACK_SIZE;
+	}
 
-    @Override
-    public boolean canExtract(int slot, ItemStack stack, Direction dir) {
-        if (slot == Slots.OUTPUT_SLOT || !FeatureControl.isSimpleMode()) return true;
+	@Override
+	public boolean isEmpty() {
+		for (int i = INPUT_START; i < INVENTORY_SIZE; i++) if (!items.get(i).isEmpty()) return false;
+		return true;
+	}
 
-        int inputSlot = Slots.toInputSlot(slot);
-        return CraftingView.Grid.contains(inputSlot) && misMatchesTemplate(inputSlot, stack);
-    }
+	@Override
+	public ItemStack getItem(int slot) {
+		return items.get(slot);
+	}
 
-    @Override
-    public ItemStack removeStack(int slot, int amount) {
-        final ItemStack removedStack;
-        if (slot == Slots.OUTPUT_SLOT) removedStack = output.split(amount);
-        else {
-            removedStack = slot >= Slots.INPUT_START ?
-                inputInventory.removeStack(Slots.toInputSlot(slot), amount) :
-                templateInventory.removeStack(slot, amount);
-        }
+	@Override
+	public ItemStack removeItem(int slot, int count) {
+		final ItemStack removed = ContainerHelper.removeItem(items, slot, count);
+		if (!removed.isEmpty()) {
+			setChanged();
+			tryCraftContinuously();
+		}
+		return removed;
+	}
 
-        return removedStack;
-    }
+	@Override
+	public ItemStack removeItemNoUpdate(int slot) {
+		return ContainerHelper.takeItem(items, slot);
+	}
 
-    @Override
-    public ItemStack removeStack(int slot) {
-        final ItemStack removedStack;
-        if (slot == Slots.OUTPUT_SLOT) {
-            removedStack = output.get();
-            output.set(ItemStack.EMPTY);
-        } else {
-            removedStack = slot >= Slots.INPUT_START ?
-                inputInventory.removeStack(Slots.toInputSlot(slot)) :
-                templateInventory.removeStack(slot);
-        }
+	@Override
+	public void setItem(int slot, ItemStack stack) {
+		setItemWithoutCrafting(slot, stack);
+		tryCraftContinuously();
+	}
 
-        tryCraftContinuously();
-        return removedStack;
-    }
+	public void setItemWithoutCrafting(int slot, ItemStack stack) {
+		items.set(slot, stack);
+		setChanged();
+	}
 
-    @Override
-    public void setStack(int slot, ItemStack stack) {
-        setStackWithoutCrafting(slot, stack);
-        tryCraftContinuously();
-    }
+	@Override
+	public boolean canPlaceItem(int slot, ItemStack stack) {
+		if (!isInput(slot) || !items.get(slot).isEmpty()) return false;
+		return !FeatureControl.isSimpleMode() || templateMatches(stack, items.get(slot - INPUT_START));
+	}
 
-    protected void setStackWithoutCrafting(int slot, ItemStack stack) {
-        // Calling super.setStack() would result in the output slot's contents being truncated
-        // So we have to directly set the slot's contents
-        if (slot == Slots.OUTPUT_SLOT) output.set(stack);
-        else {
-            if (slot >= Slots.INPUT_START) inputInventory.setStack(Slots.toInputSlot(slot), stack);
-            else templateInventory.setStack(slot, stack);
-        }
+	@Override
+	public boolean stillValid(Player player) {
+		return Container.stillValidBlockEntity(this, player);
+	}
 
-        markDirty();
-    }
+	@Override
+	public void clearContent() {
+		items.clear();
+	}
 
-    // getInvStackList
-    @Override
-    protected DefaultedList<ItemStack> method_11282() {
-        final DefaultedList<ItemStack> stacks = DefaultedList.of();
-        stacks.addAll(templateInventory.getStacks());
-        stacks.addAll(inputInventory.getStacks());
-        stacks.add(output.get());
-        return stacks;
-    }
+	// --- automation ---
 
-    // setInvStackList
-    @Override
-    protected void method_11281(DefaultedList<ItemStack> list) {
-        final int size = list.size();
-        int i;
-        for (i = 0; i < Slots.INPUT_START; i++)
-            templateInventory.setStack(i, i < size ? list.get(i) : ItemStack.EMPTY);
+	@Override
+	public int[] getSlotsForFace(Direction direction) {
+		return AVAILABLE_SLOTS;
+	}
 
-        for (int iInput = 0; i < Slots.OUTPUT_SLOT; iInput++, i++)
-            inputInventory.setStack(iInput, i < size ? list.get(i) : ItemStack.EMPTY);
+	@Override
+	public boolean canPlaceItemThroughFace(int slot, ItemStack stack, @Nullable Direction direction) {
+		return isInput(slot);
+	}
 
-        output.set(i < size ? list.get(i) : ItemStack.EMPTY);
-    }
+	@Override
+	public boolean canTakeItemThroughFace(int slot, ItemStack stack, Direction direction) {
+		if (slot == OUTPUT_SLOT || !FeatureControl.isSimpleMode()) return true;
+		return isInput(slot) && !templateMatches(stack, items.get(slot - INPUT_START));
+	}
 
-    @Override
-    protected Text getContainerName() {
-        return NAME;
-    }
+	// --- menu ---
 
-    @Override
-    public ScreenHandler createScreenHandler(int syncId, PlayerInventory playerInventory) {
-        return AutoCrafterGuiDescription.create(syncId, playerInventory, ScreenHandlerContext.create(world, pos));
-    }
+	@Override
+	protected Component getDefaultName() {
+		return NAME;
+	}
 
-    @Override
-    public int size() {
-        return Slots.INVENTORY_SIZE;
-    }
+	@Override
+	protected AbstractContainerMenu createMenu(int containerId, Inventory inventory) {
+		return new AutoCrafterMenu(containerId, inventory, this, FeatureControl.isSimpleMode());
+	}
 
-    @Override
-    public boolean isEmpty() {
-        return output.isEmpty() && templateInventory.isEmpty() && inputInventory.isEmpty();
-    }
+	@Override
+	public Boolean getScreenOpeningData(ServerPlayer player) {
+		return FeatureControl.isSimpleMode();
+	}
 
-    @Override
-    public ItemStack getStack(int slot) {
-        if (slot == Slots.OUTPUT_SLOT) return output.get();
-        else if (slot >= Slots.INPUT_START) return inputInventory.getStack(Slots.toInputSlot(slot));
-        else return templateInventory.getStack(slot);
-    }
-
-    @Override
-    public void clear() {
-        templateInventory.clear();
-        inputInventory.clear();
-        output.set(ItemStack.EMPTY);
-    }
-
-    public int getComparatorOutput() {
-        if (FeatureControl.shouldComparatorReadOutput() && !output.isEmpty()) return 15;
-        return inputInventory.getComparatorOutput();
-    }
-
-    @Override
-    public Inventory getTrimmed() {
-        return new ArrayInventory(getTrimmedStream());
-    }
-
-    @Override
-    public Stream<ItemStack> getTrimmedStream() {
-        // don't include template because it's a 'ghost' inventory
-        Stream<ItemStack> trimmedInput = inputInventory.getTrimmedStream();
-        if (output.isEmpty()) return trimmedInput;
-        else return Streams.concat(trimmedInput, Stream.of(output.get()));
-    }
-
-    public enum OutputAction {
-        FAIL, SET, INCREMENT
-    }
-
-    public interface Slots {
-        int TEMPLATE_START = 0;
-        int INPUT_START = CraftingView.Grid.SIZE;
-        int LAST_TEMPLATE_SLOT = INPUT_START - 1;
-
-        int INPUT_PLUS_OUTPUT_SIZE = CraftingView.Grid.SIZE + 1;
-
-        int OUTPUT_SLOT = CraftingView.Grid.SIZE * 2;
-        int INVENTORY_SIZE = OUTPUT_SLOT + 1;
-
-        static int toInputSlot(int slot) {
-            return slot - CraftingView.Grid.SIZE;
-        }
-    }
+	private enum OutputAction {
+		FAIL, SET, INCREMENT
+	}
 }

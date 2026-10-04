@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "automated_crafting:block/auto_crafter"
+  }
+}

@@ -1,71 +1,50 @@
-//file:noinspection GroovyAssignabilityCheck
-buildscript {
-	dependencies {
-		classpath "de.guntram.mcmod:crowdin-translate:$crowdin_translate_version"
-	}
-	repositories {
-		maven {
-			name = 'CrowdinTranslate source'
-			url = "https://minecraft.guntram.de/maven/"
-		}
-	}
-}
-
 plugins {
-	id 'fabric-loom' version '1.6-SNAPSHOT'
-//	id 'org.quiltmc.loom' version '1.+'
-
-	id 'maven-publish'
-	// Quilt mappings
-	id 'org.quiltmc.quilt-mappings-on-loom' version '4.2.3'
-//	id 'io.github.juuxel.loom-vineflower' version '1.11.0'
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
 }
 
-apply from: "https://gitlab.com/supersaiyansubtlety/mod_gradle_scripts/-/raw/$project.mod_gradle_scripts_ref/applyAll.gradle"
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
 
 dependencies {
-	/**
-	 ** Broad Maven dependency formats:
-	 Modrinth: maven.modrinth:<project-slug>:<file-version>
-	 CurseMaven: curse.maven:<descriptor>-<projectid>:<fileid>
-	 JitPack: com.github.<User>:<Repo>:<Tag/commit_hash> , see https://jitpack.io/
-	 **/
-	// Fabric API
-	dependedMod "net.fabricmc.fabric-api:fabric-api:", "fabric", null, null
-
-	// GUI library
-	bundledMod "io.github.cottonmc:LibGui:$project.libgui_version"
-
-	//Config library
-	suggestedMod true, "me.shedaniel.cloth:cloth-config-fabric:", "cloth_config"
-	// Config menu support
-	suggestedMod true, "com.terraformersmc:modmenu:", "modmenu"
-	// translation fetching
-	bundledMod "de.guntram.mcmod:crowdin-translate:$project.crowdin_translate_version"
-
-	// dev convenience
-	devRuntime "net.dblsaiko:winwonders:$project.winwonders_version"
-	devRuntime "maven.modrinth:global-options:$project.global_options_version"
-
-	//compat testing
-//	optionalMod true, "curse.maven:toms_storage_fabric-396826:3550445"
-//	optionalMod true, "maven.modrinth:modern-industrialization:1.0.4"
-////	optionalMod true, "curse.maven:industrial-revolution-391708:3599880"
-//	optionalMod true, "maven.modrinth:fabric-language-kotlin:1.7.1+kotlin.1.6.10"
-//	optionalMod true, "curse.maven:roughly-enough-items-310111:3638571"
-//	optionalMod true, "dev.architectury:architectury-fabric:3.6.15"
-//	optionalMod true, "dev.cafeteria:fake-player-api:0.3.0"
-//	optionalMod true, "net.devtech:arrp:0.5.4"
-//	optionalApi true, "teamreborn:energy:2.2.0"
-//	optionalApi true, "me.shedaniel.cloth.api:cloth-api:3.1.61"
-//	optionalApi true, "me.shedaniel.cloth.api:cloth-armor-api-v1:1.6.59"
-//	optionalApi true, "io.github.ladysnake:PlayerAbilityLib:1.5.0"
-//	optionalApi true, "vazkii.patchouli:Patchouli:1.18.1-65-FABRIC"
-//	modImplementation("com.github.Draylar:magna:1.7.0-1.18") {
-//		exclude(group: "io.github.prospector")
-//		exclude(group: "me.shedaniel.cloth")
-//		exclude(group: "net.fabricmc.fabric-api")
-//	}
-//	optionalApi true, "com.github.Draylar:magna:1.7.0-1.18", ["io.github.prospector", "me.shedaniel.cloth", "net.fabricmc.fabric-api"], []
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 }
 
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
+
+java {
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.archives_base_name}" }
+	}
+}
+
+fabricApi {
+	configureTests {
+		createSourceSet = true
+		modId = "automated_crafting_test"
+		enableGameTests = false
+		enableClientGameTests = true
+		eula = true
+	}
+}

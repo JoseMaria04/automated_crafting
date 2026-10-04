@@ -1,64 +1,64 @@
 package net.sssubtlety.automated_crafting;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
-import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
-import net.minecraft.block.AbstractBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.MapColor;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.piston.PistonBehavior;
-import net.minecraft.datafixer.TypeReferences;
-import net.minecraft.feature_flags.FeatureFlags;
-import net.minecraft.item.BlockItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.Util;
-import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 
-import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
+import java.util.Set;
+
+import static net.sssubtlety.automated_crafting.AutomatedCrafting.id;
 
 public class Registrar {
-    static void init() {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.REDSTONE_BLOCKS).register(entries -> entries.addItem(ITEM));
-        ItemStorage.SIDED.registerForBlockEntity(AutoCrafterBlockEntity::getStorage, BLOCK_ENTITY_TYPE);
-    }
+	public static final ResourceKey<Block> BLOCK_KEY = ResourceKey.create(Registries.BLOCK, AutoCrafterBlock.ID);
+	public static final ResourceKey<Item> ITEM_KEY = ResourceKey.create(Registries.ITEM, AutoCrafterBlock.ID);
 
-    public static final Identifier BLOCK_ENTITY_ID = new Identifier(NAMESPACE, "auto_crafter_entity");
+	public static final Block BLOCK = Registry.register(
+		BuiltInRegistries.BLOCK,
+		BLOCK_KEY,
+		new AutoCrafterBlock(BlockBehaviour.Properties.of()
+			.setId(BLOCK_KEY)
+			.mapColor(MapColor.STONE)
+			.pushReaction(PushReaction.IMMOVEABLE)
+			.strength(1, 3)
+		)
+	);
 
-    public static Block BLOCK = Registry.register(
-        Registries.BLOCK,
-        AutoCrafterBlock.ID,
-        new AutoCrafterBlock(AbstractBlock.Settings.create()
-            .mapColor(MapColor.GRAY)
-            .solid()
-            .pistonBehavior(PistonBehavior.BLOCK)
-            .strength(1, 3)
-        )
-    );
+	public static final BlockItem ITEM = Registry.register(
+		BuiltInRegistries.ITEM,
+		ITEM_KEY,
+		new BlockItem(BLOCK, new Item.Properties().setId(ITEM_KEY).useBlockDescriptionPrefix())
+	);
 
-    public static BlockItem ITEM = Registry.register(
-        Registries.ITEM,
-        new Identifier(NAMESPACE, "auto_crafter"),
-        new BlockItem(Registrar.BLOCK, new Item.Settings())
-    );
+	// same id as previous versions, so existing worlds keep their auto crafters' contents
+	public static final BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE = Registry.register(
+		BuiltInRegistries.BLOCK_ENTITY_TYPE,
+		id("auto_crafter_entity"),
+		new BlockEntityType<>(AutoCrafterBlockEntity::new, Set.of(BLOCK))
+	);
 
-    public static BlockEntityType<AutoCrafterBlockEntity> BLOCK_ENTITY_TYPE =
-            Registry.register(
-                Registries.BLOCK_ENTITY_TYPE,
-                BLOCK_ENTITY_ID,
-                BlockEntityType.Builder.create(AutoCrafterBlockEntity::new, Registrar.BLOCK)
-                    .build(Util.getChoiceType(TypeReferences.BLOCK_ENTITY, BLOCK_ENTITY_ID.toString()))
-            );
+	// the opening data tells the client which layout (simple or complex) the server uses
+	public static final ExtendedMenuType<AutoCrafterMenu, Boolean> MENU_TYPE = Registry.register(
+		BuiltInRegistries.MENU,
+		AutoCrafterBlock.ID,
+		new ExtendedMenuType<>(AutoCrafterMenu::new, ByteBufCodecs.BOOL)
+	);
 
-    public static ScreenHandlerType<AutoCrafterGuiDescription> SCREEN_HANDLER_TYPE =
-        Registry.register(Registries.SCREEN_HANDLER_TYPE, AutoCrafterBlock.ID, new ScreenHandlerType<>(
-            (world, playerInventory) -> AutoCrafterGuiDescription.create(world, playerInventory, ScreenHandlerContext.EMPTY),
-            FeatureFlags.DEFAULT_SET)
-        );
+	static void init() {
+		Item.BY_BLOCK.put(BLOCK, ITEM);
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.REDSTONE_BLOCKS)
+			.register(output -> output.insertAfter(Items.CRAFTER, ITEM));
+	}
 }

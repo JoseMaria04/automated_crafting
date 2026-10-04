@@ -1,3 +1,32 @@
+# Automated Crafting — unofficial port to Minecraft 26.3 (Fabric)
+
+> **This is an unofficial fork.** Automated Crafting was created by
+> [supersaiyansubtlety](https://gitlab.com/supersaiyansubtlety) and is published under the MIT license.
+> Original source: <https://gitlab.com/supersaiyansubtlety/automated_crafting> ·
+> Modrinth: <https://modrinth.com/mod/automated-crafting>.
+> All credit for the mod's design, textures and translations goes to the original author.
+> Please **don't report bugs from this port to the original author**; open an issue here instead.
+
+The original mod was discontinued for 1.21+ in favour of the vanilla Crafter. This fork (branch `26.3`) ports it to
+Fabric **26.3** so worlds with existing Automated Crafting Table contraptions keep working.
+
+### What changed in the port
+- Same block, item and block entity IDs, and the same inventory layout (template 0-8, input 9-17, output 18), so
+  existing auto crafters load with their contents.
+- Old-world data (e.g. 1.20.1) is upgraded through Minecraft's data fixer: item counts, enchantments, names, damage…
+  are kept. Tested by migrating a 1.20.1 world with the original 1.4.15 jar.
+- The GUI was rebuilt with vanilla screens (LibGui is not available for 26.3). Same layout: template, input, output.
+- Config is still `config/automated_crafting.json` with the same keys; Cloth Config / Mod Menu are no longer needed
+  (the in-game config screen was removed — edit the JSON). Crowdin translation downloads were removed; bundled
+  translations are kept.
+- Output stacks now respect the item's max stack size (previously unstackable results could stack to 64).
+
+### Building
+Requires JDK 25: `./gradlew build` → `build/libs/automated_crafting-<version>.jar`.
+`./gradlew runClientGameTest` opens an auto crafter and screenshots the GUI.
+
+---
+
 <!--required for Modrinth centering -->
 <center>
 <div style="text-align:center;line-height:250%">

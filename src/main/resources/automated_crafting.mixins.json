@@ -2,10 +2,9 @@
   "required": true,
   "minVersion": "0.8",
   "package": "net.sssubtlety.automated_crafting.mixin",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_25",
   "mixins": [
-    "accessor.CraftingInventoryAccessor",
-    "Schema3682Mixin"
+    "V1460Mixin"
   ],
   "injectors": {
     "defaultRequire": 1

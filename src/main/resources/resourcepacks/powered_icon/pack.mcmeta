@@ -1,6 +1,7 @@
-﻿{
+{
   "pack": {
-    "pack_format": 13,
-    "description": "Auto Crafter's icon has powered texture. "
+    "description": "Auto Crafter's icon has powered texture. ",
+    "min_format": 97,
+    "max_format": 97
   }
 }

@@ -1,22 +1,12 @@
-//apply from: 'https://gitlab.com/supersaiyansubtlety/mod_gradle_scripts/-/raw/parameterize/settings.gradle'
-//
 pluginManagement {
-    repositories {
-        maven {
-            name = 'Fabric'
-            url = 'https://maven.fabricmc.net/'
-        }
-        gradlePluginPortal()
-        maven {
-            name = 'Quilt'
-            url = 'https://maven.quiltmc.org/repository/release'
-        }
-        maven {
-            name = 'Cotton'
-            url = 'https://server.bbkr.space/artifactory/libs-release/'
-        }
-    }
-    plugins {
-        id "org.jetbrains.kotlin.jvm" version "1.6.0"
-    }
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		mavenCentral()
+		gradlePluginPortal()
+	}
 }
+
+rootProject.name = 'automated_crafting'

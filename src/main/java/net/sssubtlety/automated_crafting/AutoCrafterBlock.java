@@ -1,144 +1,110 @@
 package net.sssubtlety.automated_crafting;
 
-import com.mojang.serialization.MapCodec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.ItemScatterer;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.random.RandomGenerator;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.phys.BlockHitResult;
+import org.jspecify.annotations.Nullable;
 
-public class AutoCrafterBlock extends BlockWithEntity {
-    public static final Identifier ID = new Identifier("automated_crafting", "auto_crafter");
-    public static final BooleanProperty POWERED = BooleanProperty.of("powered");
-    public static final BooleanProperty ACTIVATED = BooleanProperty.of("activated");
-    private static final MapCodec<AutoCrafterBlock> CODEC = createCodec(AutoCrafterBlock::new);
+import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
 
-    protected static void logWrongBlockEntityError() {
-        AutomatedCrafting.LOGGER.error("AutoCrafterBlock found block entity that was not an AutoCrafterBlockEntity.");
-    }
+public class AutoCrafterBlock extends BaseEntityBlock {
+	public static final Identifier ID = AutomatedCrafting.id("auto_crafter");
+	public static final BooleanProperty POWERED = BooleanProperty.create("powered");
+	public static final BooleanProperty ACTIVATED = BooleanProperty.create("activated");
 
-    public AutoCrafterBlock(Settings settings) {
-        super(settings);
-        this.setDefaultState(this.stateManager.getDefaultState().with(POWERED, false).with(ACTIVATED, false));
-    }
+	public AutoCrafterBlock(BlockBehaviour.Properties properties) {
+		super(properties);
+		this.registerDefaultState(this.stateDefinition.any().setValue(POWERED, false).setValue(ACTIVATED, false));
+	}
 
-    @Override
-    protected MapCodec<? extends BlockWithEntity> getCodec() {
-        return CODEC;
-    }
+	protected boolean isPowered(Level level, BlockPos pos) {
+		return level.hasNeighborSignal(pos) || FeatureControl.isQuasiConnective() && level.hasNeighborSignal(pos.above());
+	}
 
-    protected boolean isPowered(World world, BlockPos pos) {
-        return world.isReceivingRedstonePower(pos) || FeatureControl.isQuasiConnective() && world.isReceivingRedstonePower(pos.up());
-    }
+	@Override
+	public AutoCrafterBlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new AutoCrafterBlockEntity(pos, state);
+	}
 
-    protected void tryCraft(ServerWorld world, BlockPos pos) {
-        if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity) {
-            autoCrafterBlockEntity.tryCraft();
-            world.updateNeighborsAlways(pos, this);
-        }
-    }
+	@Override
+	protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		if (!level.isClientSide()) {
+			if (level.getBlockEntity(pos) instanceof AutoCrafterBlockEntity blockEntity) player.openMenu(blockEntity);
+			else LOGGER.error("AutoCrafterBlock found block entity that was not an AutoCrafterBlockEntity.");
+		}
 
-    @Override
-    public AutoCrafterBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new AutoCrafterBlockEntity(pos, state);
-    }
+		return InteractionResult.SUCCESS;
+	}
 
-    public BlockRenderType getRenderType(BlockState state) {
-        return BlockRenderType.MODEL;
-    }
+	@Override
+	protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, @Nullable Orientation orientation, boolean movedByPiston) {
+		updatePowered(state, level, pos);
+	}
 
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (world.isClient) {
-            return ActionResult.SUCCESS;
-        } else {
-            if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity) {
-                player.openHandledScreen(autoCrafterBlockEntity);
-                return ActionResult.CONSUME;
-            } else {
-                logWrongBlockEntityError();
-                return ActionResult.PASS;
-            }
-        }
-    }
+	private void updatePowered(BlockState state, Level level, BlockPos pos) {
+		final boolean isPowered = isPowered(level, pos);
+		final boolean wasPowered = state.getValue(POWERED);
 
-    @Override
-    public void neighborUpdate(BlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos, boolean moved) {
-        boolean isPowered = isPowered(world, pos);
-        boolean wasPowered = state.get(POWERED);
+		if (isPowered) {
+			if (!wasPowered) {
+				// powering on
+				level.setBlock(pos, state.setValue(POWERED, true).setValue(ACTIVATED, true), Block.UPDATE_CLIENTS);
+				if (level instanceof ServerLevel) level.scheduleTick(pos, this, 2);
+			}
+		} else if (wasPowered || state.getValue(ACTIVATED)) {
+			level.setBlock(pos, state.setValue(POWERED, false).setValue(ACTIVATED, false), Block.UPDATE_CLIENTS);
+		}
+	}
 
-        if(isPowered) {
-            if(!wasPowered){
-                //isPowered && !wasPowered
-                //powering on
-                world.setBlockState(pos, state.with(POWERED, true).with(ACTIVATED, true), 2);
+	@Override
+	protected void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (!FeatureControl.shouldCraftContinuously() && state.getValue(ACTIVATED)) {
+			level.setBlock(pos, state.setValue(ACTIVATED, false), Block.UPDATE_CLIENTS);
+		}
 
-                if (world instanceof ServerWorld)
-                    world.scheduleBlockTick(pos, this, 2);
+		if (level.getBlockEntity(pos) instanceof AutoCrafterBlockEntity blockEntity) {
+			blockEntity.tryCraft();
+			level.updateNeighborsAt(pos, this);
+		}
+	}
 
-            }
-        } else world.setBlockState(pos, state.with(POWERED, false).with(ACTIVATED, false), 2);
-    }
+	@Override
+	protected boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
 
-    @Override
-    public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, RandomGenerator random) {
-        if (!FeatureControl.shouldCraftContinuously() && state.get(ACTIVATED))
-            world.setBlockState(pos, state.with(ACTIVATED, false), 2);
+	@Override
+	protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos, Direction direction) {
+		return level.getBlockEntity(pos) instanceof AutoCrafterBlockEntity blockEntity ? blockEntity.getComparatorOutput() : 0;
+	}
 
-        tryCraft(world, pos);
-    }
+	@Override
+	protected boolean isSignalSource(BlockState state) {
+		return FeatureControl.shouldRedirectRedstone();
+	}
 
-    @Override
-    public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (state.getBlock() != newState.getBlock()) {
-            if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity) {
-                ItemScatterer.spawn(world, pos, autoCrafterBlockEntity.getTrimmed());
-                world.updateNeighbors(pos, this);
-            }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(POWERED, ACTIVATED);
+	}
 
-            super.onStateReplaced(state, world, pos, newState, moved);
-        }
-    }
-
-    @Override
-    public boolean hasComparatorOutput(BlockState state) {
-        return true;
-    }
-
-    @Override
-    public int getComparatorOutput(BlockState state, World world, BlockPos pos) {
-        if (world.getBlockEntity(pos) instanceof AutoCrafterBlockEntity autoCrafterBlockEntity)
-            return autoCrafterBlockEntity.getComparatorOutput();
-        else {
-            logWrongBlockEntityError();
-            return 0;
-        }
-    }
-
-    @Override
-    public boolean isRedstonePowerSource(BlockState state) {
-        return FeatureControl.shouldRedirectRedstone();
-    }
-
-    @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> stateManager) {
-        stateManager.add(POWERED).add(ACTIVATED);
-    }
-
-    @Override
-    public void onPlaced(World world, BlockPos pos, BlockState state, LivingEntity placer, ItemStack itemStack) {
-        neighborUpdate(state, world, pos, this, pos, false);
-    }
+	@Override
+	public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity by, ItemStack itemStack) {
+		updatePowered(state, level, pos);
+	}
 }

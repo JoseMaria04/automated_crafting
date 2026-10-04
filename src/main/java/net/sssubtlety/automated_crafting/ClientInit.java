@@ -1,35 +1,20 @@
 package net.sssubtlety.automated_crafting;
 
-import de.guntram.mcmod.crowdintranslate.CrowdinTranslate;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
+import net.fabricmc.fabric.api.resource.v1.pack.PackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.client.gui.screen.ingame.HandledScreens;
-import net.minecraft.client.render.RenderLayer;
-import net.minecraft.util.Identifier;
-import net.sssubtlety.automated_crafting.gui.AutoCrafterGuiDescription;
-
-import static net.fabricmc.fabric.api.resource.ResourceManagerHelper.registerBuiltinResourcePack;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.sssubtlety.automated_crafting.client.AutoCrafterScreen;
 
 public class ClientInit implements ClientModInitializer {
-    public static final String POWERED = "powered";
+	@Override
+	public void onInitializeClient() {
+		MenuScreens.register(Registrar.MENU_TYPE, AutoCrafterScreen::new);
 
-    @Override
-    @Environment(EnvType.CLIENT)
-    public void onInitializeClient() {
-        BlockRenderLayerMap.INSTANCE.putBlock(Registrar.BLOCK, RenderLayer.getSolid());
-        // don't be fooled, specifying the generics' types is necessary here
-        HandledScreens.<AutoCrafterGuiDescription, AutoCrafterScreen>register(Registrar.SCREEN_HANDLER_TYPE,
-            (gui, playerInventory, titleText) -> new AutoCrafterScreen(gui, playerInventory.player, titleText)
-        );
-        if (FeatureControl.shouldFetchTranslationUpdates()) CrowdinTranslate.downloadTranslations("automated-crafting", AutomatedCrafting.NAMESPACE);
-
-        ModContainer modContainer = FabricLoader.getInstance().getModContainer(AutomatedCrafting.NAMESPACE).orElseThrow();
-        registerBuiltinResourcePack(new Identifier(AutomatedCrafting.NAMESPACE, POWERED + "_icon"), modContainer, ResourcePackActivationType.NORMAL);
-        registerBuiltinResourcePack(new Identifier(AutomatedCrafting.NAMESPACE, POWERED + "_block"), modContainer, ResourcePackActivationType.NORMAL);
-    }
+		final ModContainer modContainer = FabricLoader.getInstance().getModContainer(AutomatedCrafting.NAMESPACE).orElseThrow();
+		ResourceLoader.registerBuiltinPack(AutomatedCrafting.id("powered_icon"), modContainer, PackActivationType.NORMAL);
+		ResourceLoader.registerBuiltinPack(AutomatedCrafting.id("powered_block"), modContainer, PackActivationType.NORMAL);
+	}
 }

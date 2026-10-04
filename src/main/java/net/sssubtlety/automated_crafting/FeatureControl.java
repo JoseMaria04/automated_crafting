@@ -1,59 +1,71 @@
 package net.sssubtlety.automated_crafting;
 
-import me.shedaniel.autoconfig.AutoConfig;
-import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
-import org.jetbrains.annotations.Nullable;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.fabricmc.loader.api.FabricLoader;
 
-import static net.sssubtlety.automated_crafting.Util.isModLoaded;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-public class FeatureControl {
-    private static final @Nullable Config CONFIG_INSTANCE;
+import static net.sssubtlety.automated_crafting.AutomatedCrafting.LOGGER;
+import static net.sssubtlety.automated_crafting.AutomatedCrafting.NAMESPACE;
 
-    static {
-        if (isModLoaded("cloth-config", ">=7.0.72")) {
-            CONFIG_INSTANCE = AutoConfig.register(Config.class, GsonConfigSerializer::new).getConfig();
-        } else CONFIG_INSTANCE = null;
-    }
+/**
+ * Reads {@code config/automated_crafting.json}. The file layout is the same one Cloth Config's AutoConfig
+ * wrote in previous versions, so existing configs keep working without Cloth Config installed.
+ */
+public final class FeatureControl {
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+	private static Config config = new Config();
 
-    public interface Defaults {
-        boolean simple_mode = true;
-        boolean quasi_connective = false;
-        boolean redirect_redstone = false;
-        boolean craft_continuously = false;
-        boolean comparator_reads_output = false;
-        boolean fetch_translation_updates = true;
-    }
+	public static final class Config {
+		boolean simple_mode = true;
+		boolean quasi_connective = false;
+		boolean redirect_redstone = false;
+		boolean craft_continuously = false;
+		boolean comparator_reads_output = false;
+	}
 
-    public static boolean isSimpleMode() {
-        return CONFIG_INSTANCE == null ? Defaults.simple_mode : CONFIG_INSTANCE.simple_mode;
-    }
+	public static void init() {
+		final Path path = FabricLoader.getInstance().getConfigDir().resolve(NAMESPACE + ".json");
+		if (Files.exists(path)) {
+			try (Reader reader = Files.newBufferedReader(path)) {
+				final Config read = GSON.fromJson(reader, Config.class);
+				if (read != null) config = read;
+			} catch (IOException | RuntimeException e) {
+				LOGGER.error("Failed to read {}, using defaults", path, e);
+			}
+		}
 
-    public static boolean isQuasiConnective() {
-        return CONFIG_INSTANCE == null ? Defaults.quasi_connective : CONFIG_INSTANCE.quasi_connective;
-    }
+		try (Writer writer = Files.newBufferedWriter(path)) {
+			GSON.toJson(config, writer);
+		} catch (IOException e) {
+			LOGGER.error("Failed to write {}", path, e);
+		}
+	}
 
-    public static boolean shouldCraftContinuously() {
-        return CONFIG_INSTANCE == null ? Defaults.craft_continuously : CONFIG_INSTANCE.craft_continuously;
-    }
+	public static boolean isSimpleMode() {
+		return config.simple_mode;
+	}
 
-    public static boolean shouldRedirectRedstone() {
-        return CONFIG_INSTANCE == null ? Defaults.redirect_redstone : CONFIG_INSTANCE.redirect_redstone;
-    }
+	public static boolean isQuasiConnective() {
+		return config.quasi_connective;
+	}
 
-    public static boolean shouldComparatorReadOutput() {
-        return CONFIG_INSTANCE == null ? Defaults.comparator_reads_output : CONFIG_INSTANCE.comparator_reads_output;
-    }
+	public static boolean shouldCraftContinuously() {
+		return config.craft_continuously;
+	}
 
+	public static boolean shouldRedirectRedstone() {
+		return config.redirect_redstone;
+	}
 
-    public static boolean shouldFetchTranslationUpdates() {
-        return CONFIG_INSTANCE == null ? Defaults.fetch_translation_updates : CONFIG_INSTANCE.fetch_translation_updates;
-    }
+	public static boolean shouldComparatorReadOutput() {
+		return config.comparator_reads_output;
+	}
 
-    public static boolean isConfigLoaded() {
-        return CONFIG_INSTANCE != null;
-    }
-
-    public static void init() { }
-
-    private FeatureControl() { }
+	private FeatureControl() { }
 }
